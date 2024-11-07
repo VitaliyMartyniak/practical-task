@@ -1,0 +1,15 @@
+<div class="todo-item">
+  <mat-checkbox [checked]="todo.completed" (change)="toggleCompleteTrigger()">
+    {{ todo.description }}
+  </mat-checkbox>
+
+  <span class="todo-dates">
+    <span *ngIf="todo.dueDate">Due: {{ todo.dueDate | date }}</span>
+    <span *ngIf="todo.completed && todo.completionDate">Completed: {{ todo.completionDate | date }}</span>
+  </span>
+
+  <button mat-icon-button color="warn" (click)="deleteTodo.emit(todo.id)">
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
+
