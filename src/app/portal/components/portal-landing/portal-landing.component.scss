@@ -1,0 +1,17 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: darkgrey;
+  height: 70px;
+  padding: 0 20px;
+}
+
+main {
+  display: flex;
+  min-height: calc(100% - 70px);
+  width: 100%;
+  background-color: #E5E5E5;
+}
+
+

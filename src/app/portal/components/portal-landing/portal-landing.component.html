@@ -1,0 +1,9 @@
+<header *ngIf="user">
+  Welcome, {{user.name}}
+
+  <button mat-button (click)="logout($event)">Logout</button>
+</header>
+
+<main *ngIf="user">
+  <router-outlet></router-outlet>
+</main>

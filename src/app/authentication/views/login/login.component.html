@@ -1,0 +1,34 @@
+<section class="auth-container">
+
+  <h2 class="title">Login</h2>
+
+  <form [formGroup]="form" (ngSubmit)="loginByEmail()">
+
+    <section>
+      <mat-form-field appearance="fill">
+        <mat-label>Email Address</mat-label>
+        <input id="email" matInput placeholder="Enter your email address" formControlName="email">
+        <mat-error *ngIf="form.get('email')!.invalid && form.get('email')!.touched">
+          <span *ngIf="form.get('email')!.errors!['required']">Enter email</span>
+          <span *ngIf="form.get('email')!.errors!['emailInvalid']">Enter valid email</span>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input id="password" type="password" matInput placeholder="Enter your password" formControlName="password">
+        <mat-error *ngIf="form.get('password')!.invalid && form.get('password')!.touched">
+          <span *ngIf="form.get('password')!.errors!['required']">Enter password</span>
+          <span *ngIf="form.get('password')!.errors!['minlength']">Password must be at least {{form.get('password')!.errors!['minlength'].requiredLength}} characters long</span>
+        </mat-error>
+      </mat-form-field>
+    </section>
+
+    <button class="submit-btn" [disabled]="form.invalid" mat-raised-button type="submit">Sign in</button>
+
+    <a class="forgot-password-link" routerLink="/forgot-password">Forgot your password?</a>
+  </form>
+
+  <span class="sign-up-message">Don’t have an account? <a routerLink="/register">Sign Up</a></span>
+</section>
+

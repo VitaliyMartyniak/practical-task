@@ -1,0 +1,49 @@
+<section class="auth-container">
+
+  <h2 class="title">Sign Up</h2>
+
+  <form [formGroup]="form" (ngSubmit)="signUpUser()">
+
+    <section>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input id="name" matInput placeholder="Name" formControlName="name">
+        <mat-error *ngIf="form.get('name')!.invalid && form.get('name')!.touched">
+          <span *ngIf="form.get('name')!.errors!['required']">Enter name</span>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input id="email" matInput placeholder="Enter your email address" formControlName="email">
+        <mat-error *ngIf="form.get('email')!.invalid && form.get('email')!.touched">
+          <span *ngIf="form.get('email')!.errors!['required']">Enter email</span>
+          <span *ngIf="form.get('email')!.errors!['emailInvalid']">Enter valid email</span>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input id="password" type="password" matInput placeholder="Enter your password" formControlName="password">
+        <mat-error *ngIf="form.get('password')!.invalid && form.get('password')!.touched">
+          <span *ngIf="form.get('password')!.errors!['required']">Enter password</span>
+          <span *ngIf="form.get('password')!.errors!['minlength']">Password must be at least {{form.get('password')!.errors!['minlength'].requiredLength}} characters long</span>
+        </mat-error>
+        <mat-hint>Must be 8 characters long at least</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm New Password</mat-label>
+        <input id="confirm-password" type="password" matInput placeholder="Enter your new password again" formControlName="confirmPassword">
+        <mat-error *ngIf="form.get('confirmPassword')!.invalid && form.get('confirmPassword')!.touched">
+          <span *ngIf="form.get('confirmPassword')!.errors!['required']">Enter your new password again</span>
+          <span *ngIf="form.get('confirmPassword')!.errors!['noPassswordMatch']">Passwords do not match</span>
+        </mat-error>
+      </mat-form-field>
+    </section>
+
+    <button class="submit-btn" [disabled]="form.invalid" type="submit" mat-raised-button>Get started now</button>
+  </form>
+
+  <span class="login-message">Already have an account? <a routerLink="/login">Login</a></span>
+</section>

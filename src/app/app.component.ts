@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
-import { todoReducer } from './store/reducers/todo.reducer';
-import { TodoPageComponent } from './views/todo-page/todo-page.component';
+import { TodoPageComponent } from './portal/views/todo-page/todo-page.component';
 
 @Component({
   selector: 'app-root',
