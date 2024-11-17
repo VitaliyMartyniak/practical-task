@@ -1,0 +1,22 @@
+<form [formGroup]="formGroup">
+  <section class="field-wrapper" mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description" name="description" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Due Date</mat-label>
+      <input matInput formControlName="dueDate" name="dueDate" [matDatepicker]="picker" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Priority</mat-label>
+      <select matNativeControl formControlName="priority" required>
+        <option *ngFor="let option of priorities" [value]="option.value">{{option.label}}</option>
+      </select>
+    </mat-form-field>
+  </section>
+</form>

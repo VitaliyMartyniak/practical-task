@@ -3,11 +3,12 @@ import { map, Observable, of } from 'rxjs';
 import { Todo } from '../../../shared/interfaces/todo';
 import { todosLoadingSelector, todosSelector } from '../../../store/selectors/todo';
 import { Store } from '@ngrx/store';
-import { addTodo, deleteTodo, setTodosLoading, updateTodo } from '../../../store/actions/todo';
+import { addTodo, bulkDeleteTodo, deleteTodo, getTodos, updateTodos } from '../../../store/actions/todo';
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import { TodoUpdateModalComponent } from './components/todo-update-modal/todo-update-modal.component';
 
 @Component({
   selector: 'app-todo-page',
@@ -17,12 +18,13 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
     TodoFormComponent,
     TodoListComponent,
     AsyncPipe,
-    LoaderComponent
+    LoaderComponent,
+    TodoUpdateModalComponent
   ],
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.scss'
 })
-export class TodoPageComponent {
+export class TodoPageComponent implements OnInit {
   todos$: Observable<Todo[]> = this.store.select(todosSelector);
   isLoading$: Observable<boolean> = this.store.select(todosLoadingSelector);
   // todos$: Observable<Todo[]> = of([]);
@@ -33,19 +35,27 @@ export class TodoPageComponent {
   //
   // constructor(private store: Store) {}
   //
-  // ngOnInit(): void {
-  //   this.todos$ = of([]);
-  // }
+  ngOnInit(): void {
+    this.getAllTodos()
+  }
+
+  getAllTodos() {
+    this.store.dispatch(getTodos());
+  }
 
   onSave(todo: Todo) {
     this.store.dispatch(addTodo({ todo }));
   }
 
-  onDelete(id: string) {
-    this.store.dispatch(deleteTodo({ id }));
+  onDelete(docID: string) {
+    this.store.dispatch(deleteTodo({ docID }));
   }
 
-  onUpdate(todo: Todo) {
-    this.store.dispatch(updateTodo({ todo }));
+  onBulkDelete(docIDs: string[]) {
+    this.store.dispatch(bulkDeleteTodo({ docIDs }));
+  }
+
+  onUpdate(todos: Todo[]) {
+    this.store.dispatch(updateTodos({ todos }));
   }
 }

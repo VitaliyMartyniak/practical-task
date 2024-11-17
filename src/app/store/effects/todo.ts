@@ -9,6 +9,7 @@ import { addTodo, addTodoSuccess, addTodoFailure, setTodosLoading } from '../act
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Snackbar } from '../../shared/interfaces/snackbar';
+import { Todo } from '../../shared/interfaces/todo';
 
 @Injectable()
 export class TodoEffects {
@@ -19,17 +20,24 @@ export class TodoEffects {
   ) {}
 
   // Observable<Action>
-  // addTodo$ = createEffect((): Observable<any> =>
-  //     this.actions$.pipe(
-  //       ofType(TodoActions.addTodo),
-  //       mergeMap(action =>
-  //         this.todoService.addNewTodo(action.todo).pipe(
-  //           map(docID => TodoActions.addTodoSuccess({ docID })),
-  //           catchError(error => of(TodoActions.addTodoFailure({ error })))
-  //         )
-  //       )
-  //     )
-  // );
+  getTodos$ = createEffect((): Observable<any> =>
+      this.actions$.pipe(
+        ofType(TodoActions.getTodos),
+        mergeMap(() => {
+          this.store.dispatch(TodoActions.setTodosLoading({ isLoading: true }))
+          return this.todoService.getTodos().pipe(
+            map((todos: Todo[]) => TodoActions.getTodosSuccess({ todos })),
+            finalize((): void => {
+              this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }))
+            }),
+            catchError(err => {
+              this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: 'error' }))
+              return of();
+            })
+          )
+        })
+      )
+  );
 
   addTodo$ = createEffect((): Observable<any> =>
     this.actions$.pipe(
@@ -51,6 +59,63 @@ export class TodoEffects {
           )
         )
       }),
+    )
+  );
+
+  updateTodos$ = createEffect((): Observable<any> =>
+    this.actions$.pipe(
+      ofType(TodoActions.updateTodos),
+      mergeMap(action => {
+        this.store.dispatch(TodoActions.setTodosLoading({ isLoading: true }))
+        return this.todoService.updateTodos(action.todos).pipe(
+          map(() => TodoActions.updateTodosSuccess({ todos: action.todos })),
+          finalize((): void => {
+            this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }))
+          }),
+          catchError(err => {
+            this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: 'error' }))
+            return of();
+          })
+        )
+      })
+    )
+  );
+
+  deleteTodo$ = createEffect((): Observable<any> =>
+    this.actions$.pipe(
+      ofType(TodoActions.deleteTodo),
+      mergeMap(action => {
+        this.store.dispatch(TodoActions.setTodosLoading({ isLoading: true }))
+        return this.todoService.deleteTodo(action.docID).pipe(
+          map(() => TodoActions.deleteTodoSuccess({ docID: action.docID })),
+          finalize((): void => {
+            this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }))
+          }),
+          catchError(err => {
+            this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: 'error' }))
+            return of();
+          })
+        )
+      })
+    )
+  );
+
+  bulkDeleteTodo$ = createEffect((): Observable<any> =>
+    this.actions$.pipe(
+      ofType(TodoActions.bulkDeleteTodo),
+      mergeMap(action => {
+        this.store.dispatch(TodoActions.setTodosLoading({ isLoading: true }))
+        return this.todoService.bulkDeleteTodo(action.docIDs).pipe(
+          map(() => TodoActions.bulkDeleteTodoSuccess({ docIDs: action.docIDs })),
+          finalize((): void => {
+            this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }))
+          }),
+          catchError(err => {
+            this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: 'error' }))
+            return of();
+          })
+        )
+      })
     )
   );
 }

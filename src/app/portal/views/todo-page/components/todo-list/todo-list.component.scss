@@ -2,3 +2,15 @@
   margin: 1rem;
   padding: 1rem;
 }
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.todo-dates {
+  font-size: 0.8rem;
+  color: #555;
+}

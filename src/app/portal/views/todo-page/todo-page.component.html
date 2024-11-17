@@ -2,13 +2,14 @@
   <h1>My To-Do List</h1>
   <app-todo-form (saveTodo)="onSave($event)"></app-todo-form>
   <app-todo-list
+    *ngIf="todos$ | async"
     [todos]="(todos$ | async)!"
     (deleteTodo)="onDelete($event)"
-    (updateTodo)="onUpdate($event)"
+    (bulkDeleteTodo)="onBulkDelete($event)"
+    (updateTodos)="onUpdate($event)"
   ></app-todo-list>
 
   <section *ngIf="isLoading$ | async" class="loader-background">
     <app-loader></app-loader>
   </section>
 </section>
-

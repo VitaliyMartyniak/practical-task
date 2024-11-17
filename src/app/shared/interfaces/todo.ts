@@ -1,7 +1,7 @@
 import { PrioritiesEnum } from '../enums/priorities';
 
 export interface Todo {
-  id: string;
+  docID: string;
   description: string;
   dueDate: Date | null;
   creationDate: Date;

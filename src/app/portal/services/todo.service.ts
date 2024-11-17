@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {from, Observable} from "rxjs";
+import { from, Observable, ObservedValueOf, of } from "rxjs";
 import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, getFirestore, updateDoc } from "@angular/fire/firestore";
 import { DocumentData } from 'firebase/firestore';
 import { Todo } from '../../shared/interfaces/todo';
@@ -28,21 +28,40 @@ export class TodoService {
   getTodos(): Observable<Todo[]> {
     return from(getDocs(this.todosRef).then(r => {
       const todos: Todo[] = [];
-      r.docs.forEach((article: any) => {
-        todos.push({...article.data()});
+      r.docs.forEach((todoDoc: any) => {
+        const todo: Todo = {...todoDoc.data()};
+        // console.log('todo', todo.creationDate);
+        // todo.completionDate = todo.completionDate ? new Date(todo.completionDate['timestamp'].seconds * 1000) : null;
+        // todo.creationDate = new Date(todo.creationDate['timestamp'].seconds * 1000);
+        // todo.dueDate = new Date(todo.dueDate['timestamp'].seconds * 1000);
+        todos.push(todo);
       })
       return todos;
     }));
   }
 
-  updateTodo(todoData: DocumentData, id: string): Observable<void> {
-    const docRef = doc(this.db, 'todos', id);
-    // @ts-ignore
-    return from(updateDoc(docRef, todoData).then(() => undefined));
+  updateTodos(todoData: Todo[]): Observable<ObservedValueOf<Promise<Awaited<Observable<ObservedValueOf<Promise<undefined>>>>[]>>> {
+    const updatePromises = todoData.map((todo) => {
+      const { docID, ...data } = todo;
+      const docRef = doc(this.db, 'todos', docID);
+
+      return from(updateDoc(docRef, data).then(() => undefined));
+    });
+
+    return from(Promise.all(updatePromises));
   }
 
   deleteTodo(id: string): Observable<void> {
     const docRef = doc(this.db, 'todos', id);
     return from(deleteDoc(docRef).then(() => undefined));
+  }
+
+  bulkDeleteTodo(idsArray: string[]): Observable<ObservedValueOf<Promise<Awaited<void>[]>>> {
+    const deletePromises = idsArray.map(id => {
+      const docRef = doc(this.db, 'todos', id);
+      return deleteDoc(docRef);
+    });
+
+    return from(Promise.all(deletePromises));
   }
 }
