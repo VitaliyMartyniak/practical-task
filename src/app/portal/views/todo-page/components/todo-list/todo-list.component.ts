@@ -118,7 +118,12 @@ export class TodoListComponent {
     this.deleteTodo.emit(docID)
   }
 
-  onToggleComplete(todo: Todo) {
-    // this.updateTodos.emit({ ...todo, completed: !todo.completed, completionDate: todo.completed ? null : new Date() });
+  triggerCompleteTodo(docID: string) {
+    const neededTodo: Todo = this.todos.find(todo => todo.docID === docID)!;
+    this.updateTodos.emit([{
+      ...neededTodo,
+      completed: true,
+      completionDate: new Date(),
+    }]);
   }
 }

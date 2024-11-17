@@ -30,11 +30,12 @@ export class TodoService {
       const todos: Todo[] = [];
       r.docs.forEach((todoDoc: any) => {
         const todo: Todo = {...todoDoc.data()};
-        // console.log('todo', todo.creationDate);
-        // todo.completionDate = todo.completionDate ? new Date(todo.completionDate['timestamp'].seconds * 1000) : null;
-        // todo.creationDate = new Date(todo.creationDate['timestamp'].seconds * 1000);
-        // todo.dueDate = new Date(todo.dueDate['timestamp'].seconds * 1000);
-        todos.push(todo);
+        todos.push({
+          ...todo,
+          completionDate: todo.completionDate ? new Date(todoDoc.data().completionDate.seconds * 1000) : null,
+          creationDate: new Date(todoDoc.data().creationDate.seconds * 1000),
+          dueDate: new Date(todoDoc.data().dueDate.seconds * 1000),
+        });
       })
       return todos;
     }));
