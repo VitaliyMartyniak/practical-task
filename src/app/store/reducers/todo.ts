@@ -1,16 +1,21 @@
 import { createReducer, on } from '@ngrx/store';
 import * as TodoActions from '../actions/todo';
 import { Todo } from '../../shared/interfaces/todo';
-import { updateTodosSuccess } from '../actions/todo';
+import { setSortOrder, updateTodosSuccess } from '../actions/todo';
+import { SortBy, SortOrder } from '../../shared/interfaces/sort';
 
 export interface TodoState {
   todos: Todo[];
   isLoading: boolean;
+  sortBy: SortBy | null;
+  sortOrder: SortOrder | null;
 }
 
 const initialState: TodoState = {
   todos: [],
   isLoading: false,
+  sortBy: null,
+  sortOrder: null
 };
 
 export const todoReducer = createReducer(
@@ -41,4 +46,9 @@ export const todoReducer = createReducer(
     ...state,
     isLoading,
   })),
+  on(TodoActions.setSortOrder, (state, { sortBy, sortOrder }) => ({
+    ...state,
+    sortBy,
+    sortOrder
+  }))
 );

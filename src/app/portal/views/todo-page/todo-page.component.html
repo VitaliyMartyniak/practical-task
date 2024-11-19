@@ -1,5 +1,21 @@
 <section class="todo-page">
   <h1>My To-Do List</h1>
+  <div class="sorting-controls">
+    <label for="sort-by">Sort By:</label>
+    <select id="sort-by" [(ngModel)]="sortBy" (change)="onSortChange()">
+      <option [value]="null">None</option>
+      <option [value]="SortBy.DueDate">Due Date</option>
+      <option [value]="SortBy.Priority">Priority</option>
+      <option [value]="SortBy.Completed">Completion Status</option>
+    </select>
+
+    <label for="sort-order">Sort Order:</label>
+    <select id="sort-order" [(ngModel)]="sortOrder" (change)="onSortChange()">
+      <option [value]="null">None</option>
+      <option [value]="SortOrder.Ascending">Ascending</option>
+      <option [value]="SortOrder.Descending">Descending</option>
+    </select>
+  </div>
   <app-todo-form (saveTodo)="onSave($event)"></app-todo-form>
   <app-todo-list
     *ngIf="todos$ | async"
