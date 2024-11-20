@@ -1,21 +1,26 @@
 <section class="todo-page">
   <h1>My To-Do List</h1>
-  <label>
-    <input
-      type="checkbox"
-      [checked]="filters['completed']?.includes(true)"
-      (change)="toggleFilter('completed', true, $event)"
-    />
-    Completed
-  </label>
-  <label>
-    <input
-      type="checkbox"
-      [checked]="filters['completed']?.includes(false)"
-      (change)="toggleFilter('completed', false, $event)"
-    />
-    Incomplete
-  </label>
+  <div class="filter-controls">
+    <label>Filter by Completion:</label>
+    <div>
+      <label>
+        <input
+          type="checkbox"
+          [checked]="filters['completed']?.includes(true)"
+          (change)="toggleFilter('completed', true, $event)"
+        />
+        Completed
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          [checked]="filters['completed']?.includes(false)"
+          (change)="toggleFilter('completed', false, $event)"
+        />
+        Incomplete
+      </label>
+    </div>
+  </div>
   <div class="sorting-controls">
     <label for="sort-by">Sort By:</label>
     <select id="sort-by" [(ngModel)]="sortBy" (change)="onSortChange()">
