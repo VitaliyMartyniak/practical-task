@@ -3,19 +3,22 @@ import * as TodoActions from '../actions/todo';
 import { Todo } from '../../shared/interfaces/todo';
 import { setSortOrder, updateTodosSuccess } from '../actions/todo';
 import { SortBy, SortOrder } from '../../shared/interfaces/sort';
+import { TodoFilters } from '../../shared/interfaces/todo-filters';
 
 export interface TodoState {
   todos: Todo[];
   isLoading: boolean;
   sortBy: SortBy | null;
   sortOrder: SortOrder | null;
+  filters: TodoFilters;
 }
 
 const initialState: TodoState = {
   todos: [],
   isLoading: false,
   sortBy: null,
-  sortOrder: null
+  sortOrder: null,
+  filters: { completed: [true, false] }
 };
 
 export const todoReducer = createReducer(
@@ -50,5 +53,9 @@ export const todoReducer = createReducer(
     ...state,
     sortBy,
     sortOrder
+  })),
+  on(TodoActions.setFilters, (state, { filters }) => ({
+    ...state,
+    filters,
   }))
 );

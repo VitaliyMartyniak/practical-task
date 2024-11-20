@@ -15,12 +15,10 @@ export class AuthGuard implements CanActivate {
   ): Observable<boolean> |  Promise<boolean> | boolean {
     if (this.authService.isAuthenticated()) {
       this.authService.autoLogin();
-      console.log('true');
       return true
     } else {
       this.authService.logout();
       this.router.navigate(['/login']);
-      console.log('false');
       return false
     }
   }

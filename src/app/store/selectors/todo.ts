@@ -2,6 +2,8 @@ import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { TodoState } from '../reducers/todo';
 import { SortBy, SortOrder } from '../../shared/interfaces/sort';
 import { PrioritiesEnum } from '../../shared/enums/priorities';
+import { Todo } from '../../shared/interfaces/todo';
+import { TodoFilters } from '../../shared/interfaces/todo-filters';
 
 export const selectTodoState = createFeatureSelector<TodoState>('todos');
 
@@ -22,14 +24,26 @@ export const todosLoadingSelector = createSelector(
   state => state.isLoading
 );
 
-export const selectSortedTodos = createSelector(
+export const selectFilteredAndSortedTodos = createSelector(
   selectTodoState,
   (state) => {
+    let filteredTodos = state.todos;
+
+    Object.keys(state.filters).forEach((filterKey) => {
+      const typedFilterKey = filterKey as keyof TodoFilters;
+      const filterValues = state.filters[typedFilterKey];
+      if (Array.isArray(filterValues) && filterValues.length > 0) {
+        filteredTodos = filteredTodos.filter((todo) =>
+          filterValues.includes(todo[typedFilterKey])
+        );
+      }
+    });
+
     if (!state.sortBy || !state.sortOrder) {
-      return state.todos;
+      return filteredTodos;
     }
 
-    return [...state.todos].sort((a, b) => {
+    return [...filteredTodos].sort((a, b) => {
       let valueA: any, valueB: any;
 
       switch (state.sortBy) {

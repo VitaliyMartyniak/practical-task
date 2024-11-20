@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Todo } from '../../shared/interfaces/todo';
 import { SortBy, SortOrder } from '../../shared/interfaces/sort';
+import { TodoFilters } from '../../shared/interfaces/todo-filters';
 
 export const addTodo = createAction('[Todo] Add Todo', props<{ todo: Todo }>());
 export const addTodoSuccess = createAction('[Todo] Add Todo Success', props<{ todo: Todo, docID: string }>());
@@ -19,5 +20,6 @@ export const getTodos = createAction('[Todo] Get Todos');
 export const getTodosSuccess = createAction('[Todo] Get Todos Success', props<{ todos: Todo[] }>());
 
 export const setSortOrder = createAction('[Todo] Set Sort Order', props<{ sortBy: SortBy | null, sortOrder: SortOrder | null }>());
+export const setFilters = createAction('[Todo] Set Filters', props<{ filters: TodoFilters}>());
 
 export const setTodosLoading = createAction('[Todo] Set Todos Loading', props<{isLoading: boolean}>());
