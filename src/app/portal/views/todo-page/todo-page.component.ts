@@ -3,7 +3,7 @@ import { map, Observable, take } from 'rxjs';
 import { Todo } from '../../../shared/interfaces/todo';
 import { selectFilteredAndSortedTodos, todosLoadingSelector } from '../../../store/selectors/todo';
 import { Store } from '@ngrx/store';
-import { addTodo, bulkDeleteTodo, deleteTodo, getTodos, setFilters, setSortOrder, updateTodos } from '../../../store/actions/todo';
+import { addTodo, bulkDeleteTodo, deleteTodo, getTodos, setFilters, setSortOrder, updateSearchQuery, updateTodos } from '../../../store/actions/todo';
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { AsyncPipe, CommonModule } from '@angular/common';
@@ -36,6 +36,7 @@ export class TodoPageComponent implements OnInit {
   sortBy: SortBy | null = null;
   sortOrder: SortOrder | null = null;
   filters: TodoFilters = {};
+  searchQuery: string = ''; // Local searchQuery variable
   isLoading$: Observable<boolean> = this.store.select(todosLoadingSelector);
 
   constructor(
@@ -57,15 +58,18 @@ export class TodoPageComponent implements OnInit {
               ? params['completed'].split(',').map((v: string) => v === 'true')
               : [true, false],
           },
+          searchQuery: params['search'] || '',
         }))
       )
-      .subscribe(({ sortBy, sortOrder, filters }) => {
+      .subscribe(({ sortBy, sortOrder, filters, searchQuery }) => {
         this.sortBy = sortBy as SortBy | null;
         this.sortOrder = sortOrder as SortOrder | null;
         this.filters = filters;
+        this.searchQuery = searchQuery;
 
         this.store.dispatch(setSortOrder({ sortBy: this.sortBy, sortOrder: this.sortOrder }));
         this.store.dispatch(setFilters({ filters: this.filters }));
+        this.store.dispatch(updateSearchQuery({ query: this.searchQuery }));
       });
   }
 
@@ -76,12 +80,14 @@ export class TodoPageComponent implements OnInit {
         sortBy: this.sortBy || undefined,
         sortOrder: this.sortOrder || undefined,
         completed: this.filters['completed']?.join(',') || undefined,
+        search: this.searchQuery || undefined,
       },
       queryParamsHandling: 'merge',
     });
 
     this.store.dispatch(setSortOrder({ sortBy: this.sortBy, sortOrder: this.sortOrder }));
     this.store.dispatch(setFilters({ filters: this.filters }));
+    this.store.dispatch(updateSearchQuery({ query: this.searchQuery })); // Update store
   }
 
   toggleFilter(filterKey: keyof TodoFilters, value: boolean, event: any): void {
@@ -103,6 +109,10 @@ export class TodoPageComponent implements OnInit {
     this.onRouterAndStoreUpdate();
   }
 
+  onSearch(event: any): void {
+    this.searchQuery = event.target.value;
+    this.onRouterAndStoreUpdate();
+  }
 
   onSortChange(): void {
     this.onRouterAndStoreUpdate();
@@ -128,3 +138,4 @@ export class TodoPageComponent implements OnInit {
     this.store.dispatch(updateTodos({ todos }));
   }
 }
+

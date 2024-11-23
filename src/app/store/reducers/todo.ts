@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import * as TodoActions from '../actions/todo';
 import { Todo } from '../../shared/interfaces/todo';
-import { setSortOrder, updateTodosSuccess } from '../actions/todo';
+import { setSearchQuery, setSortOrder, updateTodosSuccess } from '../actions/todo';
 import { SortBy, SortOrder } from '../../shared/interfaces/sort';
 import { TodoFilters } from '../../shared/interfaces/todo-filters';
 
@@ -11,6 +11,7 @@ export interface TodoState {
   sortBy: SortBy | null;
   sortOrder: SortOrder | null;
   filters: TodoFilters;
+  searchQuery: string;
 }
 
 const initialState: TodoState = {
@@ -18,7 +19,10 @@ const initialState: TodoState = {
   isLoading: false,
   sortBy: null,
   sortOrder: null,
-  filters: { completed: [true, false] }
+  filters: {
+    completed: [true, false],
+  },
+  searchQuery: ''
 };
 
 export const todoReducer = createReducer(
@@ -57,5 +61,9 @@ export const todoReducer = createReducer(
   on(TodoActions.setFilters, (state, { filters }) => ({
     ...state,
     filters,
+  })),
+  on(TodoActions.setSearchQuery, (state, { query }) => ({
+    ...state,
+    searchQuery: query,
   }))
 );

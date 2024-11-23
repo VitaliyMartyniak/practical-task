@@ -21,5 +21,8 @@ export const getTodosSuccess = createAction('[Todo] Get Todos Success', props<{ 
 
 export const setSortOrder = createAction('[Todo] Set Sort Order', props<{ sortBy: SortBy | null, sortOrder: SortOrder | null }>());
 export const setFilters = createAction('[Todo] Set Filters', props<{ filters: TodoFilters}>());
+export const setSearchQuery = createAction('[Todo] Set Search Query', props<{ query: string}>());
+export const updateSearchQuery = createAction('[Todo] Update Search Query', props<{ query: string }>()
+);
 
 export const setTodosLoading = createAction('[Todo] Set Todos Loading', props<{isLoading: boolean}>());

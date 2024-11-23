@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { finalize, of } from 'rxjs';
 import { TodoService } from '../../portal/services/todo.service';
 import * as TodoActions from '../actions/todo';
 import * as NotificationsActions from '../actions/notifications';
-import { addTodo, addTodoSuccess, addTodoFailure, setTodosLoading } from '../actions/todo';
+import { addTodo, addTodoSuccess, addTodoFailure, setTodosLoading, setFilters, setSearchQuery, updateSearchQuery } from '../actions/todo';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Snackbar } from '../../shared/interfaces/snackbar';
@@ -115,6 +115,16 @@ export class TodoEffects {
             return of();
           })
         )
+      })
+    )
+  );
+
+  updateSearchQuery$ = createEffect((): Observable<any> =>
+    this.actions$.pipe(
+      ofType(TodoActions.updateSearchQuery),
+      debounceTime(1000),
+      map(({ query }) => {
+        return setSearchQuery({ query });
       })
     )
   );

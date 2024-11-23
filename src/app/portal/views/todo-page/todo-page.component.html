@@ -37,6 +37,15 @@
       <option [value]="SortOrder.Descending">Descending</option>
     </select>
   </div>
+  <div class="search-controls">
+    <label for="search">Search by Description:</label>
+    <input
+      id="search"
+      type="text"
+      (input)="onSearch($event)"
+      placeholder="Search todos..."
+    />
+  </div>
   <app-todo-form (saveTodo)="onSave($event)"></app-todo-form>
   <app-todo-list
     *ngIf="todos$ | async"

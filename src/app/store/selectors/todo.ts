@@ -39,6 +39,13 @@ export const selectFilteredAndSortedTodos = createSelector(
       }
     });
 
+    const searchQuery = state.searchQuery.toLowerCase() || '';
+    if (searchQuery) {
+      filteredTodos = filteredTodos.filter((todo) =>
+        todo.description.toLowerCase().includes(searchQuery)
+      );
+    }
+
     if (!state.sortBy || !state.sortOrder) {
       return filteredTodos;
     }
