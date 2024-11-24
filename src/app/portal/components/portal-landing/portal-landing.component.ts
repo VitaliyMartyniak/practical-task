@@ -13,6 +13,9 @@ import { TodoListComponent } from '../../views/todo-page/components/todo-list/to
 import { AsyncPipe, NgIf } from '@angular/common';
 import { UserData } from '../../../shared/interfaces/auth';
 import { MatButton } from '@angular/material/button';
+import { toggleTheme } from '../../../store/actions/theme';
+import { selectIsLightMode } from '../../../store/selectors/theme';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-portal-landing',
@@ -23,7 +26,8 @@ import { MatButton } from '@angular/material/button';
     AsyncPipe,
     MatButton,
     RouterOutlet,
-    NgIf
+    NgIf,
+    MatSlideToggle
   ],
   templateUrl: './portal-landing.component.html',
   styleUrl: './portal-landing.component.scss'
@@ -31,6 +35,7 @@ import { MatButton } from '@angular/material/button';
 export class PortalLandingComponent implements OnInit, OnDestroy {
   private userSub!: Subscription;
   private isLoadingSub!: Subscription;
+  isLightMode$ = this.store.select(selectIsLightMode);
   user!: UserData;
   isLoading = true;
 
@@ -64,6 +69,10 @@ export class PortalLandingComponent implements OnInit, OnDestroy {
   //     this.store.dispatch(setArticles({articles}));
   //   })
   // }
+
+  onToggleTheme() {
+    this.store.dispatch(toggleTheme());
+  }
 
   logout(event: Event): void {
     event.preventDefault();

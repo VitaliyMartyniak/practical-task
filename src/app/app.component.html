@@ -1,1 +1,3 @@
-<router-outlet></router-outlet>
+<div [class.light-theme]="(isLightMode$ | async)" [class.dark-theme]="!(isLightMode$ | async)">
+  <router-outlet></router-outlet>
+</div>

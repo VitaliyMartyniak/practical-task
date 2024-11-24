@@ -15,13 +15,14 @@ import {getAuth, provideAuth} from "@angular/fire/auth";
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { TodoEffects } from './store/effects/todo';
 import { notificationsReducer } from './store/reducers/notifications';
+import { themeReducer } from './store/reducers/theme';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideStore({todos: todoReducer, auth: authReducer, notifications: notificationsReducer}),
+    provideStore({todos: todoReducer, auth: authReducer, notifications: notificationsReducer, theme: themeReducer,}),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => initializeFirestore(getApp(), { experimentalForceLongPolling: true })),

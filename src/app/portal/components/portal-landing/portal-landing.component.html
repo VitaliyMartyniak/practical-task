@@ -1,7 +1,14 @@
 <header *ngIf="user">
   Welcome, {{user.name}}
 
-  <button mat-button (click)="logout($event)">Logout</button>
+  <div>
+    <mat-slide-toggle
+      [checked]="isLightMode$ | async"
+      (change)="onToggleTheme()">
+      {{ (isLightMode$ | async) ? 'Light' : 'Dark' }} Mode
+    </mat-slide-toggle>
+    <button mat-button (click)="logout($event)">Logout</button>
+  </div>
 </header>
 
 <main *ngIf="user">

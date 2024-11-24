@@ -1,4 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@use 'theme' as themes;
+
+@include mat.core();
+
+// Define classes for light and dark themes
+.light-theme, .cdk-overlay-container {
+  @include mat.all-component-themes(themes.$light-theme);
+}
+
+.dark-theme, .cdk-overlay-container {
+  @include mat.all-component-themes(themes.$dark-theme);
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
