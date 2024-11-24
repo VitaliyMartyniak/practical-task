@@ -1,14 +1,20 @@
 <section class="todo-page">
-  <h1>My To-Do List</h1>
-  <app-todo-filters></app-todo-filters>
-  <app-todo-form (saveTodo)="onSave($event)"></app-todo-form>
-  <app-todo-list
-    *ngIf="todos$ | async"
-    [todos]="(todos$ | async)!"
-    (deleteTodo)="onDelete($event)"
-    (bulkDeleteTodo)="onBulkDelete($event)"
-    (updateTodos)="onUpdate($event)"
-  ></app-todo-list>
+  <h1>To Do List</h1>
+
+  <section class="flex-column">
+    <div class="flex-row">
+      <app-todo-form (saveTodo)="onSave($event)"></app-todo-form>
+      <app-todo-filters></app-todo-filters>
+    </div>
+
+    <app-todo-list
+      *ngIf="todos$ | async"
+      [todos]="(todos$ | async)!"
+      (deleteTodo)="onDelete($event)"
+      (bulkDeleteTodo)="onBulkDelete($event)"
+      (updateTodos)="onUpdate($event)"
+    ></app-todo-list>
+  </section>
 
   <section *ngIf="isLoading$ | async" class="loader-background">
     <app-loader></app-loader>

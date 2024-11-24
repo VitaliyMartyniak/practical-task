@@ -3,12 +3,17 @@ import { RouterOutlet, NavigationStart, Event as NavigationEvent, Router } from 
 import {Observable, Subscription} from "rxjs";
 import {authLoadingSelector} from "../../../store/selectors/auth";
 import {select, Store} from "@ngrx/store";
+import { AsyncPipe, NgIf } from '@angular/common';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-auth-landing',
   standalone: true,
   imports: [
-    RouterOutlet
+    RouterOutlet,
+    NgIf,
+    LoaderComponent,
+    AsyncPipe
   ],
   templateUrl: './auth-landing.component.html',
   styleUrl: './auth-landing.component.scss'

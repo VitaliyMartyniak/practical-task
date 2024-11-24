@@ -5,10 +5,9 @@
 
   <h1 mat-dialog-title>Bulk Update Todos</h1>
 
-  <div class="d-flex flex-row mt-3">
+  <div>
     <div
       formArrayName="forms"
-      class="d-flex flex-row flex-wrap"
     >
       <div *ngFor="let form of forms.controls; let i = index">
         <app-data-collector-form

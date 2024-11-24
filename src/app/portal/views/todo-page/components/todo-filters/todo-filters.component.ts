@@ -8,7 +8,7 @@ import { map, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatOption, MatSelect } from '@angular/material/select';
-import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-todo-filters',
@@ -85,7 +85,6 @@ export class TodoFiltersComponent implements OnInit {
   }
 
   toggleFilter(filterKey: keyof TodoFilters, value: boolean, event: MatCheckboxChange): void {
-    console.log('event', event)
     const currentFilter: boolean[] = this.filters[filterKey] || [];
 
     if (event.checked) {
