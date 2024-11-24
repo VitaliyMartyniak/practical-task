@@ -5,12 +5,16 @@
 @include mat.core();
 
 // Define classes for light and dark themes
-.light-theme, .cdk-overlay-container {
+.light-theme {
   @include mat.all-component-themes(themes.$light-theme);
 }
 
-.dark-theme, .cdk-overlay-container {
+.dark-theme, .cdk-overlay-container.dark-theme-overlay {
   @include mat.all-component-themes(themes.$dark-theme);
+}
+
+.dark-theme {
+  background-color: #555555;
 }
 
 html, body { height: 100%; }

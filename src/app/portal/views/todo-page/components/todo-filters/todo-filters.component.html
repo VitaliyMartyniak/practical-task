@@ -1,0 +1,50 @@
+<div class="filter-controls">
+<!--  <mat-form-field appearance="fill">-->
+<!--    <mat-label>Filter by Completion</mat-label>-->
+<!--    <div>-->
+<!--      <mat-checkbox-->
+<!--        [checked]="filters['completed']?.includes(true)"-->
+<!--        (change)="toggleFilter('completed', true, $event.checked)">-->
+<!--        Completed-->
+<!--      </mat-checkbox>-->
+<!--      <mat-checkbox-->
+<!--        [checked]="filters['completed']?.includes(false)"-->
+<!--        (change)="toggleFilter('completed', false, $event.checked)">-->
+<!--        Incomplete-->
+<!--      </mat-checkbox>-->
+<!--    </div>-->
+<!--  </mat-form-field>-->
+</div>
+
+<div class="sorting-controls">
+  <mat-form-field appearance="fill">
+    <mat-label>Sort By</mat-label>
+    <mat-select [(value)]="sortBy" (selectionChange)="onSortChange()">
+      <mat-option [value]="null">None</mat-option>
+      <mat-option [value]="SortBy.DueDate">Due Date</mat-option>
+      <mat-option [value]="SortBy.Priority">Priority</mat-option>
+      <mat-option [value]="SortBy.Completed">Completion Status</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Sort Order</mat-label>
+    <mat-select [(value)]="sortOrder" (selectionChange)="onSortChange()">
+      <mat-option [value]="null">None</mat-option>
+      <mat-option [value]="SortOrder.Ascending">Ascending</mat-option>
+      <mat-option [value]="SortOrder.Descending">Descending</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="search-controls">
+  <mat-form-field appearance="fill">
+    <mat-label>Search by Description</mat-label>
+    <input
+      matInput
+      id="search"
+      type="text"
+      (input)="onSearch($event)"
+      placeholder="Search todos..." />
+  </mat-form-field>
+</div>

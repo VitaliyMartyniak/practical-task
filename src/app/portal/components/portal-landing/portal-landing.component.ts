@@ -40,9 +40,7 @@ export class PortalLandingComponent implements OnInit, OnDestroy {
   isLoading = true;
 
   constructor(private authService: AuthService, private router: Router, private store: Store) { }
-  // private portalService: PortalService,
   ngOnInit(): void {
-    // this.getArticles();
     this.store.dispatch(setAuthLoading({isLoading: true}));
     this.userSub = this.store.select(userSelector).subscribe((user: UserData | null): void => {
       if (user) {
@@ -54,21 +52,6 @@ export class PortalLandingComponent implements OnInit, OnDestroy {
       this.isLoading = isLoading;
     })
   }
-
-  // getArticles(): void {
-  //   this.store.dispatch(setArticlesLoading({isLoading: true}));
-  //   this.portalService.getArticles().pipe(
-  //     finalize((): void => {
-  //       this.store.dispatch(setArticlesLoading({isLoading: false}));
-  //     }),
-  //     catchError((e) => {
-  //       this.store.dispatch(setSnackbar({text: e, snackbarType: 'error'}));
-  //       return of([]);
-  //     }),
-  //   ).subscribe((articles: any) => {
-  //     this.store.dispatch(setArticles({articles}));
-  //   })
-  // }
 
   onToggleTheme() {
     this.store.dispatch(toggleTheme());
