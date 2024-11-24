@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SortBy, SortOrder } from '../../../../../shared/interfaces/sort';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { setFilters, setSortOrder, updateSearchQuery } from '../../../../../store/actions/todo';
 import { TodoFilters } from '../../../../../shared/interfaces/todo-filters';
@@ -14,12 +14,12 @@ import { MatInput, MatInputModule } from '@angular/material/input';
   selector: 'app-todo-filters',
   standalone: true,
   imports: [
-    MatCheckbox,
     MatFormField,
     MatLabel,
     MatSelect,
     MatOption,
-    MatInputModule,
+    MatInput,
+    MatCheckbox,
   ],
   templateUrl: './todo-filters.component.html',
   styleUrl: './todo-filters.component.scss'
@@ -84,12 +84,11 @@ export class TodoFiltersComponent implements OnInit {
     this.store.dispatch(updateSearchQuery({ query: this.searchQuery }));
   }
 
-  toggleFilter(filterKey: keyof TodoFilters, value: boolean, event: any): void {
-    const target = event.target as HTMLInputElement;
-
+  toggleFilter(filterKey: keyof TodoFilters, value: boolean, event: MatCheckboxChange): void {
+    console.log('event', event)
     const currentFilter: boolean[] = this.filters[filterKey] || [];
 
-    if (target.checked) {
+    if (event.checked) {
       this.filters = {
         ...this.filters,
         [filterKey]: currentFilter.includes(value) ? [...currentFilter] : [...currentFilter, value],

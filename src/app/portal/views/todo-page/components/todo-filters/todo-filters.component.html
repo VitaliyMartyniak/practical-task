@@ -1,19 +1,16 @@
 <div class="filter-controls">
-<!--  <mat-form-field appearance="fill">-->
-<!--    <mat-label>Filter by Completion</mat-label>-->
-<!--    <div>-->
-<!--      <mat-checkbox-->
-<!--        [checked]="filters['completed']?.includes(true)"-->
-<!--        (change)="toggleFilter('completed', true, $event.checked)">-->
-<!--        Completed-->
-<!--      </mat-checkbox>-->
-<!--      <mat-checkbox-->
-<!--        [checked]="filters['completed']?.includes(false)"-->
-<!--        (change)="toggleFilter('completed', false, $event.checked)">-->
-<!--        Incomplete-->
-<!--      </mat-checkbox>-->
-<!--    </div>-->
-<!--  </mat-form-field>-->
+  <div class="mat-form-field">
+    <mat-checkbox
+      [checked]="filters['completed']?.includes(true)"
+      (change)="toggleFilter('completed', true, $event)">
+      Completed
+    </mat-checkbox>
+    <mat-checkbox
+      [checked]="filters['completed']?.includes(false)"
+      (change)="toggleFilter('completed', false, $event)">
+      Incomplete
+    </mat-checkbox>
+  </div>
 </div>
 
 <div class="sorting-controls">
