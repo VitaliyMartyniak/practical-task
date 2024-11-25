@@ -8,6 +8,10 @@ import { Store } from '@ngrx/store';
 import { SnackbarType } from '../../shared/enums/SnackbarTypes';
 import { AuthService } from '../../authentication/services/auth.service';
 import { setSnackbar } from '../actions/notifications';
+import { loginUser } from '../actions/auth';
+import * as TodoActions from '../actions/todo';
+import { AuthResponse } from '../../shared/interfaces/auth';
+import { DocumentData } from 'firebase/firestore';
 
 @Injectable()
 export class AuthEffects {
@@ -22,7 +26,6 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.sendForgotPassword),
       mergeMap(({email}) => {
-        console.log('email1', email)
         this.store.dispatch(AuthActions.setAuthLoading({ isLoading: true }))
         return this.authService.forgotPasswordRequest(email).pipe(
           map(() => {
@@ -38,6 +41,32 @@ export class AuthEffects {
           })
         )
       })
+    )
+  );
+
+  loginUser$ = createEffect((): Observable<any> =>
+    this.actions$.pipe(
+      ofType(AuthActions.loginUser),
+      mergeMap(({email, password}) => {
+        this.store.dispatch(AuthActions.setAuthLoading({ isLoading: true }))
+        return this.authService.login(email, password).pipe(
+          mergeMap((response: AuthResponse): Observable<DocumentData> => {
+            const token = response.token;
+            return this.authService.getAdditionalData(response.uid).pipe(
+              map((response: DocumentData) => {
+                return AuthActions.loginUserSuccess({ response, token });
+              }),
+              finalize((): void => {
+                this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }))
+              }),
+              catchError(err => {
+                this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: SnackbarType.ERROR }))
+                return of();
+              })
+            )
+          })
+        )
+      }),
     )
   );
 }

@@ -4,14 +4,14 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
 import { CustomValidators } from '../../../shared/custom-validators/custom-validators';
-import { setAuthLoading } from '../../../store/actions/auth';
-import { AuthResponse, Token } from '../../../shared/interfaces/auth';
-import { catchError, finalize, mergeMap, Observable, of } from 'rxjs';
+import { loginUser, loginUserSuccess } from '../../../store/actions/auth';
+import { takeUntil } from 'rxjs';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { DocumentData } from 'firebase/firestore';
+import { Actions, ofType } from '@ngrx/effects';
+import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onDestroy';
 
 @Component({
   selector: 'app-login',
@@ -28,10 +28,12 @@ import { DocumentData } from 'firebase/firestore';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent extends UnsubscribeOnDestroy implements OnInit {
   form!: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router, private store: Store) {}
+  constructor(private authService: AuthService, private router: Router, private store: Store, private actions$: Actions) {
+    super();
+  }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -44,32 +46,26 @@ export class LoginComponent implements OnInit {
       ]),
       // @ts-ignore
     }, CustomValidators.emailValidator);
+    this.subscribeToLoginSuccess();
   }
 
   loginByEmail(): void {
     const loginData = {...this.form.value};
-    this.store.dispatch(setAuthLoading({isLoading: true}));
-    let token: Token;
-    this.authService.login(loginData.email, loginData.password).pipe(
-      mergeMap((response: AuthResponse): Observable<DocumentData> => {
-        token = response.token;
-        return this.authService.getAdditionalData(response.uid);
-      }),
-      finalize(() => {
-        this.form.reset();
-        this.store.dispatch(setAuthLoading({isLoading: false}));
-      }),
-      catchError((e) => {
-        // this.store.dispatch(setSnackbar({text: e, snackbarType: 'error'}));
-        return of([]);
-      }),
-    ).subscribe((response: any): void => {
-      const usersData = {...response};
+    this.store.dispatch(loginUser({email: loginData.email, password: loginData.password}));
+    this.form.reset();
+  }
+
+  subscribeToLoginSuccess(): void {
+    this.actions$.pipe(
+      ofType(loginUserSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe((action) => {
+      const usersData = {...action.response};
       localStorage.setItem('userID', usersData['uid']);
-      if (token) {
-        this.authService.setToken(token.expiresIn, token.idToken);
+      if (action.token) {
+        this.authService.setToken(action.token.expiresIn, action.token.idToken);
       }
-      this.router.navigate(['portal', 'dashboard']);
+      this.router.navigate(['portal']);
     });
   }
 }
