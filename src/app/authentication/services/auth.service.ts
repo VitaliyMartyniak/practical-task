@@ -20,7 +20,7 @@ import {
 } from "@angular/fire/auth";
 import {setUser} from "../../store/actions/auth";
 import {Store} from "@ngrx/store";
-import {AuthResponse, OAuthResponse, Token, UserData} from "../../shared/interfaces/auth";
+import {AuthResponse} from "../../shared/interfaces/auth";
 import { DocumentData } from 'firebase/firestore';
 
 @Injectable({

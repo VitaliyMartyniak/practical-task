@@ -1,3 +1,5 @@
 <div [class.light-theme]="(isLightMode$ | async)" [class.dark-theme]="!(isLightMode$ | async)">
   <router-outlet></router-outlet>
 </div>
+
+<app-snackbar></app-snackbar>

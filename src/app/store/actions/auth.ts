@@ -8,3 +8,7 @@ export const setUser = createAction('[AUTH] set user',
 export const setAuthLoading = createAction('[AUTH] set auth loading',
   props<{isLoading: boolean}>()
 );
+
+export const sendForgotPassword = createAction('[AUTH] Send Forgot Password', props<{ email: string }>());
+
+export const sendForgotPasswordSuccess = createAction('[AUTH] Send Forgot Password Success');

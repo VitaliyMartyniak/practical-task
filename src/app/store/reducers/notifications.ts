@@ -9,7 +9,7 @@ export interface NotificationsState {
 export const initialState: NotificationsState = {
   snackbar: {
     text: '',
-    snackbarType: '',
+    snackbarType: null,
   },
 }
 
@@ -26,7 +26,7 @@ export const notificationsReducer = createReducer(
     ...state,
     snackbar: {
       text: '',
-      snackbarType: '',
+      snackbarType: null,
     }
   })),
 );

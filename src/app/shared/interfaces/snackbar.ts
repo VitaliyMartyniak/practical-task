@@ -1,4 +1,6 @@
+import { SnackbarType } from '../enums/SnackbarTypes';
+
 export interface Snackbar {
   text: string,
-  snackbarType: string,
+  snackbarType: SnackbarType | null,
 }

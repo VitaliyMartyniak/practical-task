@@ -3,34 +3,37 @@
   (ngSubmit)="onSubmit()"
 >
 
-  <h1 mat-dialog-title>Bulk Update Todos</h1>
+  <h1 mat-dialog-title>Update Todo ('s)</h1>
 
-  <div>
-    <div
-      formArrayName="forms"
-    >
-      <div *ngFor="let form of forms.controls; let i = index">
-        <app-data-collector-form
-          [formGroup]="getItemFormGroup(i)"
-        >
-        </app-data-collector-form>
+  <mat-dialog-content>
+    <main>
+      <div
+        formArrayName="forms"
+      >
+        <div *ngFor="let form of forms.controls; let i = index">
+          <app-data-collector-form
+            [formGroup]="getItemFormGroup(i)"
+          >
+          </app-data-collector-form>
+        </div>
       </div>
-    </div>
-  </div>
+    </main>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      [disabled]="dataCollectorForm.invalid"
+      type="submit"
+    >
+      Submit all forms
+    </button>
 
-  <button
-    [disabled]="dataCollectorForm.invalid"
-    type="submit"
-    class="btn btn-primary"
-  >
-    Submit all forms
-  </button>
-
-  <button
-    type="button"
-    class="btn btn-primary"
-    (click)="onCancel()"
-  >
-    Cancel
-  </button>
+    <button
+      mat-raised-button
+      type="button"
+      (click)="onCancel()"
+    >
+      Cancel
+    </button>
+  </mat-dialog-actions>
 </form>

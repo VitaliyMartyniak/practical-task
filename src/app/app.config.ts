@@ -16,6 +16,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { TodoEffects } from './store/effects/todo';
 import { notificationsReducer } from './store/reducers/notifications';
 import { themeReducer } from './store/reducers/theme';
+import { AuthEffects } from './store/effects/auth';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,6 +27,6 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => initializeFirestore(getApp(), { experimentalForceLongPolling: true })),
-    provideEffects(TodoEffects),
+    provideEffects([AuthEffects, TodoEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })]
 };

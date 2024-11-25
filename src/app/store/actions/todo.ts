@@ -3,26 +3,25 @@ import { Todo } from '../../shared/interfaces/todo';
 import { SortBy, SortOrder } from '../../shared/interfaces/sort';
 import { TodoFilters } from '../../shared/interfaces/todo-filters';
 
-export const addTodo = createAction('[Todo] Add Todo', props<{ todo: Todo }>());
-export const addTodoSuccess = createAction('[Todo] Add Todo Success', props<{ todo: Todo, docID: string }>());
-export const addTodoFailure = createAction('[Todo] Add Todo Failure', props<{ error: Error }>());
+export const addTodo = createAction('[TODO] Add Todo', props<{ todo: Todo }>());
+export const addTodoSuccess = createAction('[TODO] Add Todo Success', props<{ todo: Todo, docID: string }>());
 
-export const updateTodos = createAction('[Todo] Update Todo', props<{ todos: Todo[] }>());
-export const updateTodosSuccess = createAction('[Todo] Update Todo Success', props<{ todos: Todo[] }>());
+export const updateTodos = createAction('[TODO] Update Todo', props<{ todos: Todo[] }>());
+export const updateTodosSuccess = createAction('[TODO] Update Todo Success', props<{ todos: Todo[] }>());
 
-export const deleteTodo = createAction('[Todo] Delete Todo', props<{ docID: string }>());
-export const deleteTodoSuccess = createAction('[Todo] Delete Todo Success', props<{ docID: string }>());
+export const deleteTodo = createAction('[TODO] Delete Todo', props<{ docID: string }>());
+export const deleteTodoSuccess = createAction('[TODO] Delete Todo Success', props<{ docID: string }>());
 
-export const bulkDeleteTodo = createAction('[Todo] Bulk Delete Todo', props<{ docIDs: string[] }>());
-export const bulkDeleteTodoSuccess = createAction('[Todo] Bulk Delete Todo Success', props<{ docIDs: string[] }>());
+export const bulkDeleteTodo = createAction('[TODO] Bulk Delete Todo', props<{ docIDs: string[] }>());
+export const bulkDeleteTodoSuccess = createAction('[TODO] Bulk Delete Todo Success', props<{ docIDs: string[] }>());
 
-export const getTodos = createAction('[Todo] Get Todos');
-export const getTodosSuccess = createAction('[Todo] Get Todos Success', props<{ todos: Todo[] }>());
+export const getTodos = createAction('[TODO] Get Todos');
+export const getTodosSuccess = createAction('[TODO] Get Todos Success', props<{ todos: Todo[] }>());
 
-export const setSortOrder = createAction('[Todo] Set Sort Order', props<{ sortBy: SortBy | null, sortOrder: SortOrder | null }>());
-export const setFilters = createAction('[Todo] Set Filters', props<{ filters: TodoFilters}>());
-export const setSearchQuery = createAction('[Todo] Set Search Query', props<{ query: string}>());
-export const updateSearchQuery = createAction('[Todo] Update Search Query', props<{ query: string }>()
+export const setSortOrder = createAction('[TODO] Set Sort Order', props<{ sortBy: SortBy | null, sortOrder: SortOrder | null }>());
+export const setFilters = createAction('[TODO] Set Filters', props<{ filters: TodoFilters}>());
+export const setSearchQuery = createAction('[TODO] Set Search Query', props<{ query: string}>());
+export const updateSearchQuery = createAction('[TODO] Update Search Query', props<{ query: string }>()
 );
 
-export const setTodosLoading = createAction('[Todo] Set Todos Loading', props<{isLoading: boolean}>());
+export const setTodosLoading = createAction('[TODO] Set Todos Loading', props<{isLoading: boolean}>());

@@ -7,6 +7,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { setTheme } from './store/actions/theme';
+import { SnackbarComponent } from './shared/components/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ import { setTheme } from './store/actions/theme';
     TodoPageComponent,
     CommonModule,
     AsyncPipe,
-    MatButton
+    MatButton,
+    SnackbarComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

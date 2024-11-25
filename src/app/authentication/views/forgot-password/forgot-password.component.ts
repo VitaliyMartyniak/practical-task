@@ -4,12 +4,16 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
 import { CustomValidators } from '../../../shared/custom-validators/custom-validators';
-import { setAuthLoading } from '../../../store/actions/auth';
-import { catchError, finalize, of } from 'rxjs';
+import { sendForgotPassword, sendForgotPasswordSuccess, setAuthLoading } from '../../../store/actions/auth';
+import { catchError, filter, finalize, of, takeUntil } from 'rxjs';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
+import { setSnackbar } from '../../../store/actions/notifications';
+import { SnackbarType } from '../../../shared/enums/SnackbarTypes';
+import { Actions, ofType } from '@ngrx/effects';
+import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onDestroy';
 
 @Component({
   selector: 'app-forgot-password',
@@ -26,10 +30,12 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
-export class ForgotPasswordComponent implements OnInit {
+export class ForgotPasswordComponent extends UnsubscribeOnDestroy implements OnInit {
   form!: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router, private store: Store) {}
+  constructor(private authService: AuthService, private router: Router, private store: Store, private actions$: Actions) {
+    super();
+  }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -38,22 +44,21 @@ export class ForgotPasswordComponent implements OnInit {
       ]),
       // @ts-ignore
     }, CustomValidators.emailValidator);
+
+    this.subscribeToForgotPasswordSuccess();
   }
 
-  sendResetPasswordRequest(): void {
-    this.store.dispatch(setAuthLoading({isLoading: true}));
-    this.authService.forgotPasswordRequest(this.form.value.email).pipe(
-      finalize(() => {
-        this.form.reset();
-        this.store.dispatch(setAuthLoading({isLoading: false}));
-      }),
-      catchError((e) => {
-        // this.store.dispatch(setSnackbar({text: e, snackbarType: 'error'}));
-        return of([]);
-      }),
+  resetPassword(): void {
+    this.store.dispatch(sendForgotPassword({email: this.form.value.email}));
+    this.form.reset();
+  }
+
+  subscribeToForgotPasswordSuccess(): void {
+    this.actions$.pipe(
+      ofType(sendForgotPasswordSuccess),
+      takeUntil(this.destroy$)
     ).subscribe(() => {
-      // this.store.dispatch(setSnackbar({text: 'Request sent on your email!', snackbarType: 'success'}));
       this.router.navigate(['login']);
-    })
+    });
   }
 }
