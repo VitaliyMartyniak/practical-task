@@ -8,4 +8,5 @@ export interface Todo {
   completed: boolean;
   priority: PrioritiesEnum
   completionDate: Date | null;
+  ownerDocID: string;
 }

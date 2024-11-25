@@ -15,7 +15,7 @@ export const deleteTodoSuccess = createAction('[TODO] Delete Todo Success', prop
 export const bulkDeleteTodo = createAction('[TODO] Bulk Delete Todo', props<{ docIDs: string[] }>());
 export const bulkDeleteTodoSuccess = createAction('[TODO] Bulk Delete Todo Success', props<{ docIDs: string[] }>());
 
-export const getTodos = createAction('[TODO] Get Todos');
+export const getTodos = createAction('[TODO] Get Todos', props<{ docID: string }>());
 export const getTodosSuccess = createAction('[TODO] Get Todos Success', props<{ todos: Todo[] }>());
 
 export const setSortOrder = createAction('[TODO] Set Sort Order', props<{ sortBy: SortBy | null, sortOrder: SortOrder | null }>());

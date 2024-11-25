@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { Todo } from '../../../shared/interfaces/todo';
 import { selectFilteredAndSortedTodos, todosLoadingSelector } from '../../../store/selectors/todo';
 import { Store } from '@ngrx/store';
@@ -11,6 +11,10 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import { TodoUpdateModalComponent } from './components/todo-update-modal/todo-update-modal.component';
 import { FormsModule } from '@angular/forms';
 import { TodoFiltersComponent } from './components/todo-filters/todo-filters.component';
+import { UserData } from '../../../shared/interfaces/auth';
+import { userSelector } from '../../../store/selectors/auth';
+import { setAuthLoading } from '../../../store/actions/auth';
+import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onDestroy';
 
 @Component({
   selector: 'app-todo-page',
@@ -28,24 +32,39 @@ import { TodoFiltersComponent } from './components/todo-filters/todo-filters.com
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.scss'
 })
-export class TodoPageComponent implements OnInit {
+export class TodoPageComponent extends UnsubscribeOnDestroy implements OnInit {
+  user!: UserData;
   todos$: Observable<Todo[]> = this.store.select(selectFilteredAndSortedTodos);
   isLoading$: Observable<boolean> = this.store.select(todosLoadingSelector);
 
   constructor(
     private store: Store
-  ) {}
-
-  ngOnInit(): void {
-    this.getAllTodos();
+  ) {
+    super()
   }
 
-  getAllTodos() {
-    this.store.dispatch(getTodos());
+  ngOnInit(): void {
+    this.store.select(userSelector).pipe(
+      takeUntil(this.destroy$))
+      .subscribe((user: UserData | null): void => {
+        if (user) {
+          this.user = user;
+          this.getAllTodos(user.docID!);
+        }
+      })
+  }
+
+  getAllTodos(docID: string) {
+    this.store.dispatch(getTodos({docID}));
   }
 
   onSave(todo: Todo) {
-    this.store.dispatch(addTodo({ todo }));
+    this.store.dispatch(addTodo({
+      todo: {
+        ...todo,
+        ownerDocID: this.user.docID!
+      }
+    }));
   }
 
   onDelete(docID: string) {

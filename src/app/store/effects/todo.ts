@@ -22,9 +22,9 @@ export class TodoEffects {
   getTodos$ = createEffect((): Observable<any> =>
       this.actions$.pipe(
         ofType(TodoActions.getTodos),
-        mergeMap(() => {
+        mergeMap(({docID}) => {
           this.store.dispatch(TodoActions.setTodosLoading({ isLoading: true }))
-          return this.todoService.getTodos().pipe(
+          return this.todoService.getTodos(docID).pipe(
             map((todos: Todo[]) => TodoActions.getTodosSuccess({ todos })),
             finalize((): void => {
               this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }))

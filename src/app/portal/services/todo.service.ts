@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, ObservedValueOf, of } from "rxjs";
-import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, getFirestore, updateDoc } from "@angular/fire/firestore";
+import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, getFirestore, query, updateDoc, where } from "@angular/fire/firestore";
 import { DocumentData } from 'firebase/firestore';
 import { Todo } from '../../shared/interfaces/todo';
 
@@ -25,8 +25,9 @@ export class TodoService {
     }).then(() => undefined));
   }
 
-  getTodos(): Observable<Todo[]> {
-    return from(getDocs(this.todosRef).then(r => {
+  getTodos(ownerDocID: string): Observable<Todo[]> {
+    const q = query(this.todosRef, where('ownerDocID', '==', ownerDocID));
+    return from(getDocs(q).then(r => {
       const todos: Todo[] = [];
       r.docs.forEach((todoDoc: any) => {
         const todo: Todo = {...todoDoc.data()};
