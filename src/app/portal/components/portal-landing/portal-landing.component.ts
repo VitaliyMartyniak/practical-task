@@ -36,7 +36,12 @@ export class PortalLandingComponent extends UnsubscribeOnDestroy implements OnIn
   user!: UserData;
   isLoading = true;
 
-  constructor(private authService: AuthService, private router: Router, private store: Store, private actions$: Actions) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private store: Store,
+    private actions$: Actions
+  ) {
     super()
   }
   ngOnInit(): void {

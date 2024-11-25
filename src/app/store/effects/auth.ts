@@ -81,7 +81,15 @@ export class AuthEffects {
               uid: response.uid,
             };
             return this.authService.setAdditionalData(usersData).pipe(
-              map((id: string) => AuthActions.signUpUserSuccess({ token: response.token, userID: response.uid, documentID: id })),
+              mergeMap((id: string): Observable<DocumentData> => {
+                return this.authService.saveDocumentID(id).pipe(
+                  map(() => AuthActions.signUpUserSuccess({
+                    token: response.token,
+                    userID: response.uid,
+                    documentID: id
+                  }))
+                );
+              })
             );
           }),
           catchError((err) => {

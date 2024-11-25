@@ -1,27 +1,13 @@
-import {Injectable} from '@angular/core';
-import {catchError, from, Observable, of, take} from "rxjs";
-import {
-  addDoc,
-  collection,
-  doc,
-  Firestore,
-  getDocs,
-  getFirestore,
-  query,
-  updateDoc,
-  where
-} from "@angular/fire/firestore";
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signOut
-} from "@angular/fire/auth";
-import {setUser} from "../../store/actions/auth";
-import {Store} from "@ngrx/store";
-import {AuthResponse} from "../../shared/interfaces/auth";
+import { Injectable } from '@angular/core';
+import { catchError, from, Observable, of, take } from "rxjs";
+import { addDoc, collection, doc, Firestore, getDocs, getFirestore, query, updateDoc, where } from "@angular/fire/firestore";
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "@angular/fire/auth";
+import { setUser } from "../../store/actions/auth";
+import { Store } from "@ngrx/store";
+import { AuthResponse } from "../../shared/interfaces/auth";
 import { DocumentData } from 'firebase/firestore';
+import { setSnackbar } from '../../store/actions/notifications';
+import { SnackbarType } from '../../shared/enums/SnackbarTypes';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +39,7 @@ export class AuthService {
       this.getAdditionalData(userID).pipe(
         take(1),
         catchError((e) => {
-          // this.store.dispatch(setSnackbar({text: e, snackbarType: 'error'}));
+          this.store.dispatch(setSnackbar({text: e, snackbarType: SnackbarType.ERROR}));
           return of([]);
         }),
       ).subscribe((user: any) => {

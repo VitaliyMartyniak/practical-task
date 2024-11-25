@@ -33,7 +33,12 @@ import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onD
 export class ForgotPasswordComponent extends UnsubscribeOnDestroy implements OnInit {
   form!: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router, private store: Store, private actions$: Actions) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private store: Store,
+    private actions$: Actions
+  ) {
     super();
   }
 
