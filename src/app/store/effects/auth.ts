@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, debounceTime, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { finalize, Observable, of } from 'rxjs';
 import * as AuthActions from '../actions/auth';
 import * as NotificationsActions from '../actions/notifications';
@@ -8,7 +8,6 @@ import { Store } from '@ngrx/store';
 import { SnackbarType } from '../../shared/enums/SnackbarTypes';
 import { AuthService } from '../../authentication/services/auth.service';
 import { setSnackbar } from '../actions/notifications';
-import { loginUser } from '../actions/auth';
 import * as TodoActions from '../actions/todo';
 import { AuthResponse, UserData } from '../../shared/interfaces/auth';
 import { DocumentData } from 'firebase/firestore';
@@ -96,6 +95,21 @@ export class AuthEffects {
           })
         );
       })
+    )
+  );
+
+  logoutUser$ = createEffect((): Observable<any> =>
+    this.actions$.pipe(
+      ofType(AuthActions.logoutUser),
+      mergeMap(() =>
+        this.authService.logout().pipe(
+          map(() => AuthActions.logoutUserSuccess()),
+          catchError((err) => {
+            this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: SnackbarType.ERROR }));
+            return of();
+          })
+        )
+      )
     )
   );
 }

@@ -21,3 +21,7 @@ export const signUpUserSuccess = createAction('[AUTH] Sign Up User Success', pro
 export const loginUser = createAction('[AUTH] Login User', props<{ email: string, password: string }>());
 
 export const loginUserSuccess = createAction('[AUTH] Login User Success', props<{ response: DocumentData, token: Token }>());
+
+export const logoutUser = createAction('[AUTH] Logout User');
+
+export const logoutUserSuccess = createAction('[AUTH] Logout User Success');
