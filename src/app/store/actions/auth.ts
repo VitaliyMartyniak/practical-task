@@ -14,6 +14,10 @@ export const sendForgotPassword = createAction('[AUTH] Send Forgot Password', pr
 
 export const sendForgotPasswordSuccess = createAction('[AUTH] Send Forgot Password Success');
 
+export const signUpUser = createAction('[AUTH] Sign Up User', props<{ email: string; password: string; name: string }>());
+
+export const signUpUserSuccess = createAction('[AUTH] Sign Up User Success', props<{ token: Token; userID: string; documentID: string }>());
+
 export const loginUser = createAction('[AUTH] Login User', props<{ email: string, password: string }>());
 
 export const loginUserSuccess = createAction('[AUTH] Login User Success', props<{ response: DocumentData, token: Token }>());

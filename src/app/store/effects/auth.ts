@@ -10,7 +10,7 @@ import { AuthService } from '../../authentication/services/auth.service';
 import { setSnackbar } from '../actions/notifications';
 import { loginUser } from '../actions/auth';
 import * as TodoActions from '../actions/todo';
-import { AuthResponse } from '../../shared/interfaces/auth';
+import { AuthResponse, UserData } from '../../shared/interfaces/auth';
 import { DocumentData } from 'firebase/firestore';
 
 @Injectable()
@@ -67,6 +67,35 @@ export class AuthEffects {
           })
         )
       }),
+    )
+  );
+
+  signUpUser$ = createEffect((): Observable<any> =>
+    this.actions$.pipe(
+      ofType(AuthActions.signUpUser),
+      mergeMap(({ email, password, name }) => {
+        this.store.dispatch(AuthActions.setAuthLoading({ isLoading: true }));
+        return this.authService.signUpUser(email, password).pipe(
+          mergeMap((response: AuthResponse): Observable<DocumentData> => {
+            const usersData: UserData = {
+              name: name,
+              uid: response.uid,
+            };
+            return this.authService.setAdditionalData(usersData).pipe(
+              map((id: string) => AuthActions.signUpUserSuccess({ token: response.token, userID: response.uid, documentID: id })),
+            );
+          }),
+          catchError((err) => {
+            this.store.dispatch(
+              NotificationsActions.setSnackbar({ text: err, snackbarType: SnackbarType.ERROR })
+            );
+            return of();
+          }),
+          finalize(() => {
+            this.store.dispatch(AuthActions.setAuthLoading({ isLoading: false }));
+          })
+        );
+      })
     )
   );
 }

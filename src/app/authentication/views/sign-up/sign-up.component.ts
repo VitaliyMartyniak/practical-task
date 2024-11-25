@@ -4,13 +4,14 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
 import { CustomValidators } from '../../../shared/custom-validators/custom-validators';
-import { setAuthLoading } from '../../../store/actions/auth';
-import { catchError, finalize, mergeMap, Observable, of } from 'rxjs';
-import { AuthResponse, Token, UserData } from '../../../shared/interfaces/auth';
+import { signUpUser, signUpUserSuccess } from '../../../store/actions/auth';
+import { takeUntil } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { Actions, ofType } from '@ngrx/effects';
+import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onDestroy';
 
 @Component({
   selector: 'app-sign-up',
@@ -26,10 +27,12 @@ import { CommonModule } from '@angular/common';
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent extends UnsubscribeOnDestroy implements OnInit {
   form!: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router, private store: Store) {}
+  constructor(private authService: AuthService, private router: Router, private store: Store, private actions$: Actions) {
+    super();
+  }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -48,40 +51,29 @@ export class SignUpComponent implements OnInit {
       ]),
       // @ts-ignore
     }, [CustomValidators.passwordMatchValidator, CustomValidators.emailValidator]);
+    this.subscribeToSignUpSuccess()
   }
 
-  signUpUser(): void {
-    const signUpData = {...this.form.value}
-    this.store.dispatch(setAuthLoading({isLoading: true}));
-    let usersDataUID: string;
-    let token: Token;
-    this.authService.signUpUser(signUpData.email, signUpData.password).pipe(
-      mergeMap((response: AuthResponse): Observable<string> => {
-        const usersData: UserData = {
-          name: signUpData.name,
-          uid: response.uid,
-        }
-        usersDataUID = usersData.uid;
-        token = response.token;
-        return this.authService.setAdditionalData(usersData);
-      }),
-      mergeMap((id: string): Observable<void> => {
-        return this.authService.saveDocumentID(id);
-      }),
-      finalize(() => {
-        this.form.reset();
-        this.store.dispatch(setAuthLoading({isLoading: false}));
-      }),
-      catchError((e) => {
-        // this.store.dispatch(setSnackbar({text: e, snackbarType: 'error'}));
-        return of([]);
-      }),
-    ).subscribe(() => {
-      localStorage.setItem('userID', usersDataUID);
-      if (token) {
-        this.authService.setToken(token.expiresIn, token.idToken);
+  signUp(): void {
+    const signUpData = { ...this.form.value };
+    this.store.dispatch(signUpUser({
+      email: signUpData.email,
+      password: signUpData.password,
+      name: signUpData.name
+    }));
+    this.form.reset();
+  }
+
+  subscribeToSignUpSuccess(): void {
+    this.actions$.pipe(
+      ofType(signUpUserSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe((action) => {
+      localStorage.setItem('userID', action.userID);
+      if (action.token) {
+        this.authService.setToken(action.token.expiresIn, action.token.idToken);
       }
-      this.router.navigate(['portal', 'dashboard']);
+      this.router.navigate(['portal']);
     });
   }
 }
