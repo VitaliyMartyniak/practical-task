@@ -4,7 +4,11 @@
 
 @include mat.core();
 
-// Define classes for light and dark themes
+:root {
+  --primary-color: #4C6FFF;
+  --primary-background-color: #fff;
+}
+
 .light-theme {
   @include mat.all-component-themes(themes.$light-theme);
 }
@@ -15,6 +19,8 @@
 
 .dark-theme {
   background-color: #555555;
+  --primary-color: pink;
+  --primary-background-color: #555555;
 }
 
 html, body { height: 100%; }
