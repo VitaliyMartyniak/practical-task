@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { catchError, from, Observable, of, take } from "rxjs";
 import { addDoc, collection, doc, Firestore, getDocs, getFirestore, query, updateDoc, where } from "@angular/fire/firestore";
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "@angular/fire/auth";
-import { setUser } from "../../store/actions/auth";
+import { cleanupAuthStore, setUser } from "../../store/actions/auth";
 import { Store } from "@ngrx/store";
 import { AuthResponse } from "../../shared/interfaces/auth";
 import { DocumentData } from 'firebase/firestore';
 import { setSnackbar } from '../../store/actions/notifications';
 import { SnackbarType } from '../../shared/enums/SnackbarTypes';
+import { cleanupTodoStore } from '../../store/actions/todo';
 
 @Injectable({
   providedIn: 'root'
@@ -93,12 +94,8 @@ export class AuthService {
   }
 
   clearStore(): void {
-    this.store.dispatch(setUser({user: null}));
-    // this.store.dispatch(setArticles({articles: []}));
-    // this.store.dispatch(setSearch({search: ''}));
-    // this.store.dispatch(setOrder({order: 'asc'}));
-    // this.store.dispatch(setCategory({category: 'All Categories'}));
-    // this.store.dispatch(setWeatherLocations({weatherLocations: []}))
+    this.store.dispatch(cleanupAuthStore());
+    this.store.dispatch(cleanupTodoStore());
   }
 
   isAuthenticated(): boolean {

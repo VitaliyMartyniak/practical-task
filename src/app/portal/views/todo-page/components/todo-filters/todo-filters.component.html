@@ -41,6 +41,7 @@
       matInput
       id="search"
       type="text"
+      [(ngModel)]="searchQuery"
       (input)="onSearch($event)"
       placeholder="Search todos..." />
   </mat-form-field>

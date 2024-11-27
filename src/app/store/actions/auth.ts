@@ -25,3 +25,5 @@ export const loginUserSuccess = createAction('[AUTH] Login User Success', props<
 export const logoutUser = createAction('[AUTH] Logout User');
 
 export const logoutUserSuccess = createAction('[AUTH] Logout User Success');
+
+export const cleanupAuthStore = createAction('[AUTH] Cleanup Auth Store');

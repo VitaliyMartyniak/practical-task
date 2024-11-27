@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { SortBy, SortOrder } from '../../../../../shared/interfaces/sort';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { setFilters, setSortOrder, updateSearchQuery } from '../../../../../store/actions/todo';
+import { setFilters, setSearchQuery, setSortOrder, updateSearchQuery } from '../../../../../store/actions/todo';
 import { TodoFilters } from '../../../../../shared/interfaces/todo-filters';
 import { map, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-todo-filters',
@@ -20,6 +21,7 @@ import { MatInput } from '@angular/material/input';
     MatOption,
     MatInput,
     MatCheckbox,
+    FormsModule,
   ],
   templateUrl: './todo-filters.component.html',
   styleUrl: './todo-filters.component.scss'
@@ -63,7 +65,7 @@ export class TodoFiltersComponent implements OnInit {
 
         this.store.dispatch(setSortOrder({ sortBy: this.sortBy, sortOrder: this.sortOrder }));
         this.store.dispatch(setFilters({ filters: this.filters }));
-        this.store.dispatch(updateSearchQuery({ query: this.searchQuery }));
+        this.store.dispatch(setSearchQuery({ query: this.searchQuery }));
       });
   }
 

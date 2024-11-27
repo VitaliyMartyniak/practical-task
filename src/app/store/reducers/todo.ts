@@ -65,5 +65,10 @@ export const todoReducer = createReducer(
   on(TodoActions.setSearchQuery, (state, { query }) => ({
     ...state,
     searchQuery: query,
-  }))
+  })),
+  on(TodoActions.cleanupTodoStore, () => {
+    return {
+      ...initialState
+    }
+  }),
 );
