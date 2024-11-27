@@ -86,7 +86,7 @@ export class TodoListComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['todos']) {
+    if (changes['todos'] && changes['todos'].currentValue?.length) {
       this.dataSource.data = this.todos;
       this.dataSource.paginator = this.paginator;
     }
