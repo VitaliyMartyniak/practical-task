@@ -1,5 +1,5 @@
 <div class="table-container" *ngIf="todos && todos.length">
-  <table mat-table [dataSource]="todos">
+  <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -16,7 +16,6 @@
       </td>
     </ng-container>
 
-    <!-- Task Column -->
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef>Description</th>
       <td mat-cell *matCellDef="let todo"> {{ todo.description }} </td>
@@ -50,7 +49,6 @@
       <td mat-cell *matCellDef="let todo"> {{ todo.priority }} </td>
     </ng-container>
 
-    <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let todo">
@@ -59,12 +57,16 @@
       </td>
     </ng-container>
 
-    <!-- Header and Row Definitions -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <!-- Bulk Action Inputs -->
+  <mat-paginator
+    #paginator
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 25]">
+  </mat-paginator>
+
   <div class="bulk-actions">
     <button mat-raised-button color="primary" (click)="openUpdateModal()" [disabled]="selection.size === 0">Bulk Update</button>
     <button mat-raised-button color="warn" (click)="bulkDelete()" [disabled]="selection.size === 0">Bulk Delete</button>

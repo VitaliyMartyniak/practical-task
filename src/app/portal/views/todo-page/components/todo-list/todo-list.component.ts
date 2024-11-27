@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Todo } from '../../../../../shared/interfaces/todo';
 import { MatCard } from '@angular/material/card';
 import { MatList, MatListItem } from '@angular/material/list';
@@ -6,12 +6,25 @@ import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable } from '@angular/material/table';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource
+} from '@angular/material/table';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { MatDialog } from '@angular/material/dialog';
 import { TodoUpdateModalComponent } from '../todo-update-modal/todo-update-modal.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-todo-list',
@@ -40,16 +53,21 @@ import { TodoUpdateModalComponent } from '../todo-update-modal/todo-update-modal
     MatFormField,
     FormsModule,
     MatInput,
-    MatLabel
+    MatLabel,
+    MatPaginator
   ],
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.scss'
 })
-export class TodoListComponent {
+export class TodoListComponent implements OnChanges {
   @Input() todos: Todo[] = [];
   @Output() deleteTodo = new EventEmitter<string>();
   @Output() bulkDeleteTodo = new EventEmitter<string[]>();
   @Output() updateTodos = new EventEmitter<Todo[]>();
+
+  @ViewChild('paginator') paginator!: MatPaginator;
+
+  dataSource = new MatTableDataSource<Todo>([]);
 
   displayedColumns: string[] = [
     'select',
@@ -65,6 +83,13 @@ export class TodoListComponent {
   selection: Set<string> = new Set();
 
   constructor(private dialog: MatDialog) {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['todos']) {
+      this.dataSource.data = this.todos;
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   openUpdateModal(id?: string) {
