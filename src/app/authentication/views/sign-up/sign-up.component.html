@@ -29,7 +29,6 @@
           <span *ngIf="form.get('password')!.errors!['required']">Enter password</span>
           <span *ngIf="form.get('password')!.errors!['minlength']">Password must be at least {{form.get('password')!.errors!['minlength'].requiredLength}} characters long</span>
         </mat-error>
-        <mat-hint>Must be 8 characters long at least</mat-hint>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
@@ -37,7 +36,7 @@
         <input id="confirm-password" type="password" matInput placeholder="Enter your new password again" formControlName="confirmPassword">
         <mat-error *ngIf="form.get('confirmPassword')!.invalid && form.get('confirmPassword')!.touched">
           <span *ngIf="form.get('confirmPassword')!.errors!['required']">Enter your new password again</span>
-          <span *ngIf="form.get('confirmPassword')!.errors!['noPassswordMatch']">Passwords do not match</span>
+          <span *ngIf="form.get('confirmPassword')!.errors!['noPasswordMatch']">Passwords do not match</span>
         </mat-error>
       </mat-form-field>
     </section>

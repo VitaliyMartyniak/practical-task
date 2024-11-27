@@ -44,7 +44,6 @@ export class LoginComponent extends UnsubscribeOnDestroy implements OnInit {
         Validators.required,
         Validators.minLength(8)
       ]),
-      // @ts-ignore
     }, CustomValidators.emailValidator);
     this.subscribeToLoginSuccess();
   }

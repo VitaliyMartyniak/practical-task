@@ -54,7 +54,6 @@ export class SignUpComponent extends UnsubscribeOnDestroy implements OnInit {
       confirmPassword: new FormControl('', [
         Validators.required,
       ]),
-      // @ts-ignore
     }, [CustomValidators.passwordMatchValidator, CustomValidators.emailValidator]);
     this.subscribeToSignUpSuccess()
   }

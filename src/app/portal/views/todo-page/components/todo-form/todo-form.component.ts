@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { PrioritiesEnum } from '../../../../../shared/enums/priorities';
 import { Todo } from '../../../../../shared/interfaces/todo';
+import { CustomValidators } from '../../../../../shared/custom-validators/custom-validators';
 
 @Component({
   selector: 'app-todo-form',
@@ -43,27 +44,32 @@ export class TodoFormComponent implements OnInit {
   @Output() saveTodo = new EventEmitter<Todo>();
 
   ngOnInit() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     this.form = new FormGroup({
       description: new FormControl('', [
         Validators.required
       ]),
-      dueDate: new FormControl(new Date(), [
+      dueDate: new FormControl(tomorrow, [
         Validators.required,
       ]),
-      priority: new FormControl('', [
+      priority: new FormControl(PrioritiesEnum.LOW, [
         Validators.required,
       ]),
-    });
+    }, [CustomValidators.dateValidator]);
   }
 
   onSave() {
-    const newTodo = {
-      completed: false,
-      ...this.form.value,
-      creationDate: new Date(),
-      completionDate: null
+    if (this.form.valid) {
+      const newTodo = {
+        completed: false,
+        ...this.form.value,
+        creationDate: new Date(),
+        completionDate: null
+      }
+      this.saveTodo.emit(newTodo);
+      this.form.reset();
     }
-    this.saveTodo.emit(newTodo);
-    this.form.reset();
   }
 }

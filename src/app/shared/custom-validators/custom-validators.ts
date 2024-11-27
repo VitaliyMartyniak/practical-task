@@ -1,28 +1,43 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class CustomValidators {
-  static passwordMatchValidator(control: AbstractControl): void {
-    const password: string = control.get('password')!.value;
-    const confirmPassword: string = control.get('confirmPassword')!.value;
+  static passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+
     if (password !== confirmPassword) {
-      control.get('confirmPassword')!.setErrors({ noPassswordMatch: true });
+      control.get('confirmPassword')!.setErrors({ noPasswordMatch: true });
+      return control;
+    } else {
+      return null;
     }
   }
 
-  static passwordNotMatchValidator(control: AbstractControl): void {
-    const oldPassword: string = control.get('oldPassword')!.value;
-    const newPassword: string = control.get('password')!.value;
-    if (oldPassword === newPassword && newPassword !== '') {
-      control.get('password')!.setErrors({ passswordMatch: true });
-    }
-  }
-
-  static emailValidator(control: AbstractControl): void {
+  static emailValidator(control: AbstractControl): ValidationErrors | null {
     const email: string = control.get('email')!.value;
-    const pattern = new RegExp("^[a-z0-9._%+-]+@[a-z0-9-]+[.]+.[a-z]{1,2}$");
-    let valid = pattern.test(email);
-    if (!valid) {
+    const pattern = /^[a-z0-9._%+-]+@[a-z0-9-]+\.[a-z]{2,}$/;
+
+    if (email && !pattern.test(email)) {
       control.get('email')!.setErrors({ emailInvalid: true });
+      return control;
+    } else {
+      return null;
+    }
+  }
+
+  static dateValidator(control: AbstractControl): ValidationErrors | null {
+    const dueDate = control.get('dueDate')!.value;
+    if (!dueDate) {
+      return null;
+    }
+
+    const today = new Date();
+
+    if (new Date(dueDate) < today) {
+      control.get('dueDate')!.setErrors({ invalidDate: true });
+      return control;
+    } else {
+      return null;
     }
   }
 }

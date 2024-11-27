@@ -12,6 +12,9 @@
         <input matInput formControlName="dueDate" name="dueDate" [matDatepicker]="picker" />
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="form.get('dueDate')!.invalid && form.get('dueDate')!.touched">
+          <span *ngIf="form.get('dueDate')!.errors!['invalidDate']">Date could not be in the past</span>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -22,7 +25,7 @@
       </mat-form-field>
     </section>
 
-    <button mat-raised-button color="primary" type="submit">Add Task</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Add Task</button>
   </form>
 </mat-card>
 

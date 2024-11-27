@@ -47,7 +47,6 @@ export class ForgotPasswordComponent extends UnsubscribeOnDestroy implements OnI
       email: new FormControl('', [
         Validators.required,
       ]),
-      // @ts-ignore
     }, CustomValidators.emailValidator);
 
     this.subscribeToForgotPasswordSuccess();
