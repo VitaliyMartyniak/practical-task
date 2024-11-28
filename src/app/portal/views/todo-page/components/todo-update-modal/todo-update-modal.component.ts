@@ -53,7 +53,7 @@ export class TodoUpdateModalComponent implements OnInit {
     });
     this.data.todos.forEach(todo => {
       const formGroup = this.fb.group({
-        description: [todo.description, [Validators.required]],
+        description: [todo.description, [Validators.required, Validators.pattern(/\S+/)]],
         dueDate: [todo.dueDate, [Validators.required]],
         priority: [todo.priority, [Validators.required]],
       });

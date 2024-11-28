@@ -3,6 +3,9 @@
     <mat-form-field appearance="fill">
       <mat-label>Description</mat-label>
       <input matInput formControlName="description" name="description" required />
+      <mat-error *ngIf="formGroup.get('description')!.invalid && formGroup.get('description')!.touched">
+        <span *ngIf="formGroup.get('description')!.errors!['pattern']">Description could not be empty</span>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">

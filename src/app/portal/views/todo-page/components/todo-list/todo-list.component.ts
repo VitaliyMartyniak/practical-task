@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Todo } from '../../../../../shared/interfaces/todo';
 import { MatCard } from '@angular/material/card';
 import { MatList, MatListItem } from '@angular/material/list';
@@ -82,11 +82,12 @@ export class TodoListComponent implements OnChanges {
 
   selection: Set<string> = new Set();
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private cdr: ChangeDetectorRef) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['todos'] && changes['todos'].currentValue?.length) {
+      this.cdr.detectChanges();
       this.dataSource.data = this.todos;
       this.dataSource.paginator = this.paginator;
     }

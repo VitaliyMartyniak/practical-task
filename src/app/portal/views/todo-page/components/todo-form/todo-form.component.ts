@@ -49,7 +49,7 @@ export class TodoFormComponent implements OnInit {
 
     this.form = new FormGroup({
       description: new FormControl('', [
-        Validators.required
+        Validators.required, Validators.pattern(/\S+/)
       ]),
       dueDate: new FormControl(tomorrow, [
         Validators.required,
