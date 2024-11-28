@@ -8,7 +8,6 @@ import { Store } from '@ngrx/store';
 import { SnackbarType } from '../../shared/enums/SnackbarTypes';
 import { AuthService } from '../../authentication/services/auth.service';
 import { setSnackbar } from '../actions/notifications';
-import * as TodoActions from '../actions/todo';
 import { AuthResponse, UserData } from '../../shared/interfaces/auth';
 import { DocumentData } from 'firebase/firestore';
 
@@ -24,48 +23,57 @@ export class AuthEffects {
   sendForgotPassword$ = createEffect((): Observable<any> =>
     this.actions$.pipe(
       ofType(AuthActions.sendForgotPassword),
-      mergeMap(({email}) => {
-        this.store.dispatch(AuthActions.setAuthLoading({ isLoading: true }))
-        return this.authService.forgotPasswordRequest(email).pipe(
-          map(() => {
-            this.store.dispatch(setSnackbar({text: 'Request sent on your email!', snackbarType: SnackbarType.SUCCESS}));
-            return AuthActions.sendForgotPasswordSuccess();
-          }),
-          finalize((): void => {
-            this.store.dispatch(AuthActions.setAuthLoading({ isLoading: false }))
-          }),
-          catchError(err => {
-            this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: SnackbarType.ERROR }))
-            return of();
+      mergeMap(({ email }) =>
+        this.authService.forgotPasswordRequest(email).pipe(
+          map(() =>
+            NotificationsActions.setSnackbar({
+              text: 'Request sent to your email!',
+              snackbarType: SnackbarType.SUCCESS
+            })
+          ),
+          catchError((error: any) =>
+            of(
+              NotificationsActions.setSnackbar({
+                text: error.message || 'Failed to send request.',
+                snackbarType: SnackbarType.ERROR
+              }),
+            )
+          ),
+          finalize(() => {
+            this.store.dispatch(AuthActions.setAuthLoading({ isLoading: false }));
           })
         )
-      })
+      )
     )
   );
 
   loginUser$ = createEffect((): Observable<any> =>
     this.actions$.pipe(
       ofType(AuthActions.loginUser),
-      mergeMap(({email, password}) => {
-        this.store.dispatch(AuthActions.setAuthLoading({ isLoading: true }))
+      mergeMap(({ email, password }) => {
+        this.store.dispatch(AuthActions.setAuthLoading({ isLoading: true }));
         return this.authService.login(email, password).pipe(
-          mergeMap((response: AuthResponse): Observable<DocumentData> => {
+          mergeMap((response: AuthResponse) => {
             const token = response.token;
             return this.authService.getAdditionalData(response.uid).pipe(
-              map((response: DocumentData) => {
-                return AuthActions.loginUserSuccess({ response, token });
+              map((additionalData: DocumentData) =>
+                AuthActions.loginUserSuccess({ response: additionalData, token })
+              )
+            );
+          }),
+          catchError((error: any) => {
+            return of(
+              NotificationsActions.setSnackbar({
+                text: error.message,
+                snackbarType: SnackbarType.ERROR
               }),
-              finalize((): void => {
-                this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }))
-              }),
-              catchError(err => {
-                this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: SnackbarType.ERROR }))
-                return of();
-              })
-            )
+            );
+          }),
+          finalize(() => {
+            this.store.dispatch(AuthActions.setAuthLoading({ isLoading: false }));
           })
-        )
-      }),
+        );
+      })
     )
   );
 
@@ -75,26 +83,31 @@ export class AuthEffects {
       mergeMap(({ email, password, name }) => {
         this.store.dispatch(AuthActions.setAuthLoading({ isLoading: true }));
         return this.authService.signUpUser(email, password).pipe(
-          mergeMap((response: AuthResponse): Observable<DocumentData> => {
-            const usersData: UserData = {
-              name: name,
+          mergeMap((response: AuthResponse) => {
+            const userData: UserData = {
+              name,
               uid: response.uid,
             };
-            return this.authService.setAdditionalData(usersData).pipe(
-              mergeMap((id: string): Observable<DocumentData> => {
-                return this.authService.saveDocumentID(id).pipe(
-                  map(() => AuthActions.signUpUserSuccess({
-                    token: response.token,
-                    userID: response.uid,
-                    documentID: id
-                  }))
-                );
-              })
+            return this.authService.setAdditionalData(userData).pipe(
+              mergeMap((id: string) =>
+                this.authService.saveDocumentID(id).pipe(
+                  map(() =>
+                    AuthActions.signUpUserSuccess({
+                      token: response.token,
+                      userID: response.uid,
+                      documentID: id,
+                    })
+                  )
+                )
+              )
             );
           }),
           catchError((err) => {
             this.store.dispatch(
-              NotificationsActions.setSnackbar({ text: err, snackbarType: SnackbarType.ERROR })
+              NotificationsActions.setSnackbar({
+                text: err.message,
+                snackbarType: SnackbarType.ERROR,
+              })
             );
             return of();
           }),
@@ -113,7 +126,12 @@ export class AuthEffects {
         this.authService.logout().pipe(
           map(() => AuthActions.logoutUserSuccess()),
           catchError((err) => {
-            this.store.dispatch(NotificationsActions.setSnackbar({ text: err, snackbarType: SnackbarType.ERROR }));
+            this.store.dispatch(
+              NotificationsActions.setSnackbar({
+                text: err.message,
+                snackbarType: SnackbarType.ERROR,
+              })
+            );
             return of();
           })
         )
