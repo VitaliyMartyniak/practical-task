@@ -89,6 +89,7 @@ export class TodoListComponent implements OnChanges {
     if (changes['todos'] && changes['todos'].currentValue?.length) {
       this.cdr.detectChanges();
       this.dataSource.data = this.todos;
+      this.paginator.pageIndex = 0;
       this.dataSource.paginator = this.paginator;
     }
   }

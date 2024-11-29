@@ -40,18 +40,18 @@ export class TodoFormComponent implements OnInit {
     { label: 'High', value: PrioritiesEnum.HIGH }
   ]
   form!: FormGroup;
+  tomorrow = new Date();
 
   @Output() saveTodo = new EventEmitter<Todo>();
 
   ngOnInit() {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
 
     this.form = new FormGroup({
       description: new FormControl('', [
         Validators.required, Validators.pattern(/\S+/)
       ]),
-      dueDate: new FormControl(tomorrow, [
+      dueDate: new FormControl(this.tomorrow, [
         Validators.required,
       ]),
       priority: new FormControl(PrioritiesEnum.LOW, [
@@ -70,6 +70,8 @@ export class TodoFormComponent implements OnInit {
       }
       this.saveTodo.emit(newTodo);
       this.form.reset();
+      this.form.get('dueDate')?.setValue(this.tomorrow)
+      this.form.get('priority')?.setValue(PrioritiesEnum.LOW)
     }
   }
 }
