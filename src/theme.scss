@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
 
-// Define the light theme
 $light-theme: mat.define-theme(
     (
       color: (
@@ -11,7 +10,6 @@ $light-theme: mat.define-theme(
     )
 );
 
-// Define the dark theme
 $dark-theme: mat.define-theme(
     (
       color: (

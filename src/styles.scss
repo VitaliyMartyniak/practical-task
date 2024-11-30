@@ -10,11 +10,11 @@
 }
 
 .light-theme {
-  @include mat.all-component-themes(themes.$light-theme);
+  @include mat.all-component-colors(themes.$light-theme);
 }
 
 .dark-theme, .cdk-overlay-container.dark-theme-overlay {
-  @include mat.all-component-themes(themes.$dark-theme);
+  @include mat.all-component-colors(themes.$dark-theme);
 }
 
 .dark-theme {
