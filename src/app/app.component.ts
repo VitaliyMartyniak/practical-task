@@ -8,6 +8,8 @@ import { MatButton } from '@angular/material/button';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { setTheme } from './store/actions/theme';
 import { SnackbarComponent } from './shared/components/snackbar/snackbar.component';
+import { UnsubscribeOnDestroy } from './shared/directives/unsubscribe-onDestroy';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,14 +25,16 @@ import { SnackbarComponent } from './shared/components/snackbar/snackbar.compone
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent extends UnsubscribeOnDestroy implements OnInit {
   isLightMode$ = this.store.select(selectIsLightMode);
 
   constructor(
     private store: Store,
     private overlayContainer: OverlayContainer,
     private renderer: Renderer2
-  ) {}
+  ) {
+    super()
+  }
 
   ngOnInit() {
     this.checkThemeMode();
@@ -40,7 +44,9 @@ export class AppComponent implements OnInit {
     const isLightMode = localStorage.getItem('isLightMode') === 'true';
     this.store.dispatch(setTheme({ isLightMode }));
     const overlayContainerElement = this.overlayContainer.getContainerElement();
-    this.isLightMode$.subscribe((isLightMode: boolean) => {
+    this.isLightMode$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((isLightMode: boolean) => {
       if (isLightMode) {
         localStorage.setItem('isLightMode', 'true');
         this.renderer.removeClass(overlayContainerElement, 'dark-theme-overlay');

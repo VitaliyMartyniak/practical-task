@@ -44,7 +44,7 @@ export class TodoFormComponent implements OnInit {
 
   @Output() saveTodo = new EventEmitter<Todo>();
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.tomorrow.setDate(this.tomorrow.getDate() + 1);
 
     this.form = new FormGroup({
@@ -60,7 +60,7 @@ export class TodoFormComponent implements OnInit {
     }, [CustomValidators.dateValidator]);
   }
 
-  onSave() {
+  onSave(): void {
     if (this.form.valid) {
       const newTodo = {
         completed: false,

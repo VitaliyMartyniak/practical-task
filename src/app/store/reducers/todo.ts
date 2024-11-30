@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as TodoActions from '../actions/todo';
 import { Todo } from '../../shared/interfaces/todo';
-import { setSearchQuery, setSortOrder, updateTodosSuccess } from '../actions/todo';
 import { SortBy, SortOrder } from '../../shared/interfaces/sort';
 import { TodoFilters } from '../../shared/interfaces/todo-filters';
 
@@ -35,7 +34,7 @@ export const todoReducer = createReducer(
     ...state,
     todos: [...state.todos, { ...todo, docID }]
   })),
-  on(updateTodosSuccess, (state, { todos }) => ({
+  on(TodoActions.updateTodosSuccess, (state, { todos }) => ({
     ...state,
     todos: state.todos.map(todo =>
       todos.find(updatedTodo => updatedTodo.docID === todo.docID) || todo

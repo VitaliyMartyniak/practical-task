@@ -1,8 +1,9 @@
-import { Component, Directive, OnDestroy } from '@angular/core';
+import { Directive, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Directive({
-  selector: '[UnsubscribeOnDestroy]'
+  selector: '[UnsubscribeOnDestroy]',
+  standalone: true
 })
 
 export class UnsubscribeOnDestroy implements OnDestroy {

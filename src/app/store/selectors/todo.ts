@@ -2,23 +2,10 @@ import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { TodoState } from '../reducers/todo';
 import { SortBy, SortOrder } from '../../shared/interfaces/sort';
 import { PrioritiesEnum } from '../../shared/enums/priorities';
-import { Todo } from '../../shared/interfaces/todo';
 import { TodoFilters } from '../../shared/interfaces/todo-filters';
 
 export const selectTodoState = createFeatureSelector<TodoState>('todos');
 
-export const todosSelector = createSelector(
-  selectTodoState,
-  (state: TodoState) => state.todos
-);
-export const sortBySelector = createSelector(
-  selectTodoState,
-  (state: TodoState) => state.sortBy
-);
-export const sortOrderSelector = createSelector(
-  selectTodoState,
-  (state: TodoState) => state.sortOrder
-);
 export const todosLoadingSelector = createSelector(
   selectTodoState,
   state => state.isLoading

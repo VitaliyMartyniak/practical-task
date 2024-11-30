@@ -2,13 +2,9 @@ import {createAction, props} from "@ngrx/store";
 import { Token, UserData } from '../../shared/interfaces/auth';
 import { DocumentData } from 'firebase/firestore';
 
-export const setUser = createAction('[AUTH] set user',
-  props<{user: UserData | null}>()
-);
+export const setUser = createAction('[AUTH] set user', props<{user: UserData | null}>());
 
-export const setAuthLoading = createAction('[AUTH] set auth loading',
-  props<{isLoading: boolean}>()
-);
+export const setAuthLoading = createAction('[AUTH] set auth loading', props<{isLoading: boolean}>());
 
 export const sendForgotPassword = createAction('[AUTH] Send Forgot Password', props<{ email: string }>());
 

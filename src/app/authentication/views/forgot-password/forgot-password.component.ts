@@ -4,14 +4,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
 import { CustomValidators } from '../../../shared/custom-validators/custom-validators';
-import { sendForgotPassword, sendForgotPasswordSuccess, setAuthLoading } from '../../../store/actions/auth';
-import { catchError, filter, finalize, of, takeUntil } from 'rxjs';
+import { sendForgotPassword, sendForgotPasswordSuccess } from '../../../store/actions/auth';
+import { takeUntil } from 'rxjs';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { setSnackbar } from '../../../store/actions/notifications';
-import { SnackbarType } from '../../../shared/enums/SnackbarTypes';
 import { Actions, ofType } from '@ngrx/effects';
 import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onDestroy';
 

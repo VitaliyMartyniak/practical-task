@@ -1,8 +1,3 @@
-export interface OAuthResponse {
-  token: Token,
-  user: UserData
-}
-
 export interface Token {
   idToken: string,
   expiresIn: number

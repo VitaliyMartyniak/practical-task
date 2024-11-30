@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { from, Observable, ObservedValueOf, of } from "rxjs";
-import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, getFirestore, query, updateDoc, where } from "@angular/fire/firestore";
+import { from, Observable, ObservedValueOf } from "rxjs";
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from "@angular/fire/firestore";
 import { DocumentData } from 'firebase/firestore';
 import { Todo } from '../../shared/interfaces/todo';
 
@@ -11,7 +11,7 @@ export class TodoService {
   private db = getFirestore();
   private todosRef = collection(this.db, 'todos');
 
-  constructor(private firestore: Firestore) { }
+  constructor() { }
 
   addNewTodo(newTodo: DocumentData): Observable<string> {
     return from(addDoc(this.todosRef, newTodo).then(r => r.id));
@@ -42,12 +42,12 @@ export class TodoService {
     }));
   }
 
-  updateTodos(todoData: Todo[]): Observable<ObservedValueOf<Promise<Awaited<Observable<ObservedValueOf<Promise<undefined>>>>[]>>> {
+  updateTodos(todoData: Todo[]): Observable<void[]> {
     const updatePromises = todoData.map((todo) => {
       const { docID, ...data } = todo;
       const docRef = doc(this.db, 'todos', docID);
 
-      return from(updateDoc(docRef, data).then(() => undefined));
+      return updateDoc(docRef, data);
     });
 
     return from(Promise.all(updatePromises));
@@ -55,13 +55,13 @@ export class TodoService {
 
   deleteTodo(id: string): Observable<void> {
     const docRef = doc(this.db, 'todos', id);
-    return from(deleteDoc(docRef).then(() => undefined));
+    return from(deleteDoc(docRef));
   }
 
-  bulkDeleteTodo(idsArray: string[]): Observable<ObservedValueOf<Promise<Awaited<void>[]>>> {
+  bulkDeleteTodo(idsArray: string[]): Observable<void[]> {
     const deletePromises = idsArray.map(id => {
       const docRef = doc(this.db, 'todos', id);
-      return deleteDoc(docRef);
+      return deleteDoc(docRef); // deleteDoc already returns Promise<void>
     });
 
     return from(Promise.all(deletePromises));

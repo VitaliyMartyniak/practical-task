@@ -27,13 +27,12 @@ export class TodoEffects {
         return this.todoService.getTodos(docID).pipe(
           map((todos: Todo[]) => TodoActions.getTodosSuccess({ todos })),
           catchError((err) => {
-            this.store.dispatch(
+            return of(
               NotificationsActions.setSnackbar({
                 text: err.message,
                 snackbarType: SnackbarType.ERROR,
               })
             );
-            return of();
           }),
           finalize(() => {
             this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }));
@@ -55,13 +54,12 @@ export class TodoEffects {
             )
           ),
           catchError((err) => {
-            this.store.dispatch(
+            return of(
               NotificationsActions.setSnackbar({
                 text: err.message,
                 snackbarType: SnackbarType.ERROR,
               })
             );
-            return of();
           }),
           finalize(() => {
             this.store.dispatch(
@@ -89,13 +87,12 @@ export class TodoEffects {
             TodoActions.updateTodosSuccess({ todos: action.todos })
           ),
           catchError((err) => {
-            this.store.dispatch(
+            return of(
               NotificationsActions.setSnackbar({
                 text: err.message,
                 snackbarType: SnackbarType.ERROR,
               })
             );
-            return of();
           }),
           finalize(() => {
             this.store.dispatch(
@@ -121,13 +118,12 @@ export class TodoEffects {
         return this.todoService.deleteTodo(action.docID).pipe(
           map(() => TodoActions.deleteTodoSuccess({ docID: action.docID })),
           catchError((err) => {
-            this.store.dispatch(
+            return of(
               NotificationsActions.setSnackbar({
                 text: err.message,
                 snackbarType: SnackbarType.ERROR,
               })
             );
-            return of();
           }),
           finalize(() => {
             this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }));
@@ -151,13 +147,12 @@ export class TodoEffects {
         return this.todoService.bulkDeleteTodo(action.docIDs).pipe(
           map(() => TodoActions.bulkDeleteTodoSuccess({ docIDs: action.docIDs })),
           catchError((err) => {
-            this.store.dispatch(
+            return of(
               NotificationsActions.setSnackbar({
                 text: err.message,
                 snackbarType: SnackbarType.ERROR,
               })
             );
-            return of(); // Gracefully terminate the observable on error.
           }),
           finalize(() => {
             this.store.dispatch(TodoActions.setTodosLoading({ isLoading: false }));

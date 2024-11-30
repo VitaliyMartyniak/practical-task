@@ -13,7 +13,6 @@ import { FormsModule } from '@angular/forms';
 import { TodoFiltersComponent } from './components/todo-filters/todo-filters.component';
 import { UserData } from '../../../shared/interfaces/auth';
 import { userSelector } from '../../../store/selectors/auth';
-import { setAuthLoading } from '../../../store/actions/auth';
 import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onDestroy';
 
 @Component({
@@ -54,11 +53,11 @@ export class TodoPageComponent extends UnsubscribeOnDestroy implements OnInit {
       })
   }
 
-  getAllTodos(docID: string) {
+  getAllTodos(docID: string): void {
     this.store.dispatch(getTodos({docID}));
   }
 
-  onSave(todo: Todo) {
+  onSave(todo: Todo): void {
     this.store.dispatch(addTodo({
       todo: {
         ...todo,
@@ -67,15 +66,15 @@ export class TodoPageComponent extends UnsubscribeOnDestroy implements OnInit {
     }));
   }
 
-  onDelete(docID: string) {
+  onDelete(docID: string): void {
     this.store.dispatch(deleteTodo({ docID }));
   }
 
-  onBulkDelete(docIDs: string[]) {
+  onBulkDelete(docIDs: string[]): void {
     this.store.dispatch(bulkDeleteTodo({ docIDs }));
   }
 
-  onUpdate(todos: Todo[]) {
+  onUpdate(todos: Todo[]): void {
     this.store.dispatch(updateTodos({ todos }));
   }
 }

@@ -1,4 +1,4 @@
-<div class="filter-controls">
+<section class="filter-controls">
   <div class="mat-form-field">
     <mat-checkbox
       [checked]="filters['completed']?.includes(true)"
@@ -11,9 +11,9 @@
       Incomplete
     </mat-checkbox>
   </div>
-</div>
+</section>
 
-<div class="sorting-controls">
+<section class="sorting-controls">
   <mat-form-field appearance="fill">
     <mat-label>Sort By</mat-label>
     <mat-select [(value)]="sortBy" (selectionChange)="onSortChange()">
@@ -32,9 +32,9 @@
       <mat-option [value]="SortOrder.Descending">Descending</mat-option>
     </mat-select>
   </mat-form-field>
-</div>
+</section>
 
-<div class="search-controls">
+<section class="search-controls">
   <mat-form-field appearance="fill">
     <mat-label>Search by Description</mat-label>
     <input
@@ -45,4 +45,4 @@
       (input)="onSearch($event)"
       placeholder="Search todos..." />
   </mat-form-field>
-</div>
+</section>

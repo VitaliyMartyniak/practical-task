@@ -82,14 +82,13 @@ export class AuthService {
   }
 
   forgotPasswordRequest(email: string): Observable<void> {
-    return from(sendPasswordResetEmail(this.auth, email).then(() => undefined));
+    return from(sendPasswordResetEmail(this.auth, email));
   }
 
   logout(): Observable<void> {
     return from(signOut(this.auth).then(() => {
       this.clearStore();
       localStorage.clear();
-      return undefined;
     }));
   }
 

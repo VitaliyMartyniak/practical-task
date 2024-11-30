@@ -1,4 +1,4 @@
-<div class="table-container" *ngIf="todos && todos.length">
+<section *ngIf="todos && todos.length">
   <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -71,4 +71,4 @@
     <button mat-raised-button color="primary" (click)="openUpdateModal()" [disabled]="selection.size === 0">Bulk Update</button>
     <button mat-raised-button color="warn" (click)="bulkDelete()" [disabled]="selection.size === 0">Bulk Delete</button>
   </div>
-</div>
+</section>

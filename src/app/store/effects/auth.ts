@@ -104,13 +104,12 @@ export class AuthEffects {
             );
           }),
           catchError((err) => {
-            this.store.dispatch(
+            return of(
               NotificationsActions.setSnackbar({
                 text: err.message,
                 snackbarType: SnackbarType.ERROR,
               })
             );
-            return of();
           }),
           finalize(() => {
             this.store.dispatch(AuthActions.setAuthLoading({ isLoading: false }));
@@ -127,13 +126,12 @@ export class AuthEffects {
         this.authService.logout().pipe(
           map(() => AuthActions.logoutUserSuccess()),
           catchError((err) => {
-            this.store.dispatch(
+            return of(
               NotificationsActions.setSnackbar({
                 text: err.message,
                 snackbarType: SnackbarType.ERROR,
               })
             );
-            return of();
           })
         )
       )

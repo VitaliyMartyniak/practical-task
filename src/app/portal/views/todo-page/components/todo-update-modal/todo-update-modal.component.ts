@@ -43,11 +43,11 @@ export class TodoUpdateModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { todos: Todo[] }
   ) {}
 
-  onCancel() {
+  onCancel(): void {
     this.dialogRef.close();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.dataCollectorForm = this.fb.group({
       forms: this.fb.array([]),
     });
