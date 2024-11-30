@@ -103,8 +103,9 @@ export class TodoFiltersComponent implements OnInit {
     this.onRouterAndStoreUpdate();
   }
 
-  onSearch(event: any): void {
-    this.searchQuery = event.target.value;
+  onSearch(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    this.searchQuery = inputElement.value;
     this.onRouterAndStoreUpdate();
   }
 

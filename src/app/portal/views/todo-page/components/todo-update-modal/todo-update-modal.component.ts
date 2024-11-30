@@ -70,7 +70,7 @@ export class TodoUpdateModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const updatedTodos = this.dataCollectorForm.value.forms.map((updatedForm: any, index: number) => {
+    const updatedTodos = this.dataCollectorForm.value.forms.map((updatedForm: FormGroup, index: number) => {
       return {
         ...this.data.todos[index],
         ...updatedForm

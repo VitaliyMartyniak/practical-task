@@ -38,7 +38,8 @@ export const selectFilteredAndSortedTodos = createSelector(
     }
 
     return [...filteredTodos].sort((a, b) => {
-      let valueA: any, valueB: any;
+      let valueA: number | boolean | null = null;
+      let valueB: number | boolean | null = null;
 
       switch (state.sortBy) {
         case SortBy.DueDate:
@@ -65,7 +66,10 @@ export const selectFilteredAndSortedTodos = createSelector(
           break;
       }
 
-      return state.sortOrder === SortOrder.Ascending ? valueA - valueB : valueB - valueA;
+      const numA = valueA ?? 0;
+      const numB = valueB ?? 0;
+
+      return state.sortOrder === SortOrder.Ascending ? numA - numB : numB - numA;
     });
   }
 );
