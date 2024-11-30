@@ -25,16 +25,17 @@ export class AuthEffects {
       ofType(AuthActions.sendForgotPassword),
       mergeMap(({ email }) =>
         this.authService.forgotPasswordRequest(email).pipe(
-          map(() =>
-            NotificationsActions.setSnackbar({
-              text: 'Request sent to your email!',
+          map(() => {
+            this.store.dispatch(setSnackbar({
+              text: 'Request sent on your email!',
               snackbarType: SnackbarType.SUCCESS
-            })
-          ),
+            }));
+            return AuthActions.sendForgotPasswordSuccess();
+          }),
           catchError((error: any) =>
             of(
               NotificationsActions.setSnackbar({
-                text: error.message || 'Failed to send request.',
+                text: error.message,
                 snackbarType: SnackbarType.ERROR
               }),
             )
