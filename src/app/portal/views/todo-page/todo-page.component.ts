@@ -47,7 +47,6 @@ export class TodoPageComponent extends UnsubscribeOnDestroy implements OnInit {
       takeUntil(this.destroy$))
       .subscribe((user: UserData | null): void => {
         if (user) {
-          console.log('user', user)
           this.user = user;
           this.getAllTodos(user.docID!);
         }
@@ -55,7 +54,6 @@ export class TodoPageComponent extends UnsubscribeOnDestroy implements OnInit {
   }
 
   getAllTodos(docID: string): void {
-    console.log('docID', docID);
     this.store.dispatch(getTodos({docID}));
   }
 
