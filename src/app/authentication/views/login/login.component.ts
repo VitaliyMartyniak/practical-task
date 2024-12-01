@@ -63,12 +63,7 @@ export class LoginComponent extends UnsubscribeOnDestroy implements OnInit {
     this.actions$.pipe(
       ofType(loginUserSuccess),
       takeUntil(this.destroy$)
-    ).subscribe((action) => {
-      const usersData = {...action.response};
-      localStorage.setItem('userID', usersData['uid']);
-      if (action.token) {
-        this.authService.setToken(action.token.expiresIn, action.token.idToken);
-      }
+    ).subscribe(() => {
       this.router.navigate(['portal']);
     });
   }

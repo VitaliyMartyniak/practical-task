@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, from, Observable, of, take } from "rxjs";
 import { addDoc, collection, doc, Firestore, getDocs, getFirestore, query, updateDoc, where } from "@angular/fire/firestore";
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "@angular/fire/auth";
-import { cleanupAuthStore, setUser } from "../../store/actions/auth";
+import { cleanupAuthStore, logoutUser, setUser } from "../../store/actions/auth";
 import { Store } from "@ngrx/store";
 import { AuthResponse } from "../../shared/interfaces/auth";
 import { DocumentData } from 'firebase/firestore';
@@ -32,21 +32,6 @@ export class AuthService {
         },
       };
     }));
-  }
-
-  autoLogin(): void {
-    const userID = localStorage.getItem('userID');
-    if (userID) {
-      this.getAdditionalData(userID).pipe(
-        take(1),
-        catchError((e) => {
-          this.store.dispatch(setSnackbar({text: e, snackbarType: SnackbarType.ERROR}));
-          return of([]);
-        }),
-      ).subscribe((user: any) => {
-        this.store.dispatch(setUser({user}));
-      })
-    }
   }
 
   signUpUser(email: string, password: string): Observable<AuthResponse> {
@@ -105,7 +90,6 @@ export class AuthService {
     const tokenExp = localStorage.getItem('token-exp');
     const expDate = tokenExp ? new Date(tokenExp) : null;
     if(!expDate || new Date() > expDate) {
-      this.logout();
       return null
     }
     return localStorage.getItem('token');

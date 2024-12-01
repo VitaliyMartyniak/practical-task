@@ -19,6 +19,41 @@ export class AuthEffects {
     private authService: AuthService
   ) {}
 
+  autoLogin$ = createEffect((): Observable<any> =>
+    this.actions$.pipe(
+      ofType(AuthActions.autoLogin),
+      mergeMap(() => {
+        const userID = localStorage.getItem('userID');
+        if (!userID) {
+          return of(
+            NotificationsActions.setSnackbar({
+              text: 'No userID found in localStorage',
+              snackbarType: SnackbarType.ERROR,
+            })
+          );
+        }
+        return this.authService.getAdditionalData(userID).pipe(
+          map((documentData: any) => {
+            const user: UserData = {
+              uid: documentData.uid,
+              name: documentData.name,
+              docID: documentData.docID
+            };
+            return AuthActions.setUser({ user });
+          }),
+          catchError((error) => {
+            return of(
+              NotificationsActions.setSnackbar({
+                text: error.message,
+                snackbarType: SnackbarType.ERROR,
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
   // Observable<Action>
   sendForgotPassword$ = createEffect((): Observable<any> =>
     this.actions$.pipe(
@@ -32,7 +67,7 @@ export class AuthEffects {
             }));
             return AuthActions.sendForgotPasswordSuccess();
           }),
-          catchError((error: any) =>
+          catchError((error) =>
             of(
               NotificationsActions.setSnackbar({
                 text: error.message,
@@ -57,12 +92,16 @@ export class AuthEffects {
           mergeMap((response: AuthResponse) => {
             const token = response.token;
             return this.authService.getAdditionalData(response.uid).pipe(
-              map((additionalData: DocumentData) =>
-                AuthActions.loginUserSuccess({ response: additionalData, token })
-              )
+              map((additionalData: DocumentData) => {
+                localStorage.setItem('userID', additionalData['uid']);
+                if (token) {
+                  this.authService.setToken(token.expiresIn, token.idToken);
+                }
+                return AuthActions.loginUserSuccess()
+              })
             );
           }),
-          catchError((error: any) => {
+          catchError((error) => {
             return of(
               NotificationsActions.setSnackbar({
                 text: error.message,
