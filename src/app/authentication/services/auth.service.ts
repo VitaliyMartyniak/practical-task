@@ -9,6 +9,7 @@ import { DocumentData } from 'firebase/firestore';
 import { setSnackbar } from '../../store/actions/notifications';
 import { SnackbarType } from '../../shared/enums/SnackbarTypes';
 import { cleanupTodoStore } from '../../store/actions/todo';
+import { setTheme } from '../../store/actions/theme';
 
 @Injectable({
   providedIn: 'root'
@@ -74,13 +75,13 @@ export class AuthService {
     return from(signOut(this.auth).then(() => {
       this.clearStore();
       localStorage.clear();
-      localStorage.setItem('isLightMode', 'true');
     }));
   }
 
   clearStore(): void {
     this.store.dispatch(cleanupAuthStore());
     this.store.dispatch(cleanupTodoStore());
+    this.store.dispatch(setTheme({ isLightMode: true }));
   }
 
   isAuthenticated(): boolean {
