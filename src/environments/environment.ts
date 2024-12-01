@@ -6,13 +6,7 @@ import {Environment} from "./interface";
 
 export const environment: Environment = {
   production: false,
-  // apiKey: 'AIzaSyAtfjX7eKFbmxD7YqV6KPr8mT-lMDwowmU',
-  // fbDBUrl: 'https://middle-project-6ebe9-default-rtdb.europe-west1.firebasedatabase.app',
-  apiKey: '',
-  fbDBUrl: '',
   firebase: {
-    // databaseURL: 'https://middle-project-6ebe9-default-rtdb.europe-west1.firebasedatabase.app',
-    databaseURL: '',
     apiKey: "AIzaSyCEGpMEs5JHMrwtEZWWz9GHblr1HstUhdI",
     authDomain: "practical-task-ce5ee.firebaseapp.com",
     projectId: "practical-task-ce5ee",
