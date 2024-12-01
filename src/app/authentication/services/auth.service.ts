@@ -74,6 +74,7 @@ export class AuthService {
     return from(signOut(this.auth).then(() => {
       this.clearStore();
       localStorage.clear();
+      localStorage.setItem('isLightMode', 'true');
     }));
   }
 
