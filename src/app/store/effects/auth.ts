@@ -54,7 +54,6 @@ export class AuthEffects {
     )
   );
 
-  // Observable<Action>
   sendForgotPassword$ = createEffect((): Observable<any> =>
     this.actions$.pipe(
       ofType(AuthActions.sendForgotPassword),

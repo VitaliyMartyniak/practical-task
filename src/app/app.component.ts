@@ -41,7 +41,7 @@ export class AppComponent extends UnsubscribeOnDestroy implements OnInit {
   }
 
   checkThemeMode() {
-    const isLightMode = localStorage.getItem('isLightMode') === 'true';
+    const isLightMode = localStorage.getItem('isLightMode') === 'true' || !localStorage.getItem('isLightMode');
     this.store.dispatch(setTheme({ isLightMode }));
     const overlayContainerElement = this.overlayContainer.getContainerElement();
     this.isLightMode$.pipe(

@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { catchError, from, Observable, of, take } from "rxjs";
+import { from, Observable } from "rxjs";
 import { addDoc, collection, doc, Firestore, getDocs, getFirestore, query, updateDoc, where } from "@angular/fire/firestore";
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "@angular/fire/auth";
-import { cleanupAuthStore, logoutUser, setUser } from "../../store/actions/auth";
+import { cleanupAuthStore } from "../../store/actions/auth";
 import { Store } from "@ngrx/store";
 import { AuthResponse } from "../../shared/interfaces/auth";
 import { DocumentData } from 'firebase/firestore';
-import { setSnackbar } from '../../store/actions/notifications';
-import { SnackbarType } from '../../shared/enums/SnackbarTypes';
 import { cleanupTodoStore } from '../../store/actions/todo';
 import { setTheme } from '../../store/actions/theme';
 
