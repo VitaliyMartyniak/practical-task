@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { from, Observable, ObservedValueOf } from "rxjs";
+import { from, Observable } from "rxjs";
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from "@angular/fire/firestore";
 import { DocumentData } from 'firebase/firestore';
 import { Todo } from '../../shared/interfaces/todo';

@@ -14,3 +14,7 @@
 <main *ngIf="user">
   <router-outlet></router-outlet>
 </main>
+
+<section *ngIf="isLoading$ | async" class="loader-background">
+  <app-loader></app-loader>
+</section>

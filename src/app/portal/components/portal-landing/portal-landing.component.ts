@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import { takeUntil } from "rxjs";
-import {Store} from "@ngrx/store";
+import { Observable, takeUntil } from "rxjs";
+import { select, Store } from "@ngrx/store";
 import {authLoadingSelector, userSelector} from "../../../store/selectors/auth";
 import { logoutUser, logoutUserSuccess, setAuthLoading } from "../../../store/actions/auth";
 import {AuthService} from "../../../authentication/services/auth.service";
@@ -15,6 +15,7 @@ import { selectIsLightMode } from '../../../store/selectors/theme';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Actions, ofType } from '@ngrx/effects';
 import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onDestroy';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-portal-landing',
@@ -26,7 +27,8 @@ import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onD
     MatButton,
     RouterOutlet,
     NgIf,
-    MatSlideToggle
+    MatSlideToggle,
+    LoaderComponent
   ],
   templateUrl: './portal-landing.component.html',
   styleUrl: './portal-landing.component.scss'
@@ -34,7 +36,7 @@ import { UnsubscribeOnDestroy } from '../../../shared/directives/unsubscribe-onD
 export class PortalLandingComponent extends UnsubscribeOnDestroy implements OnInit {
   isLightMode$ = this.store.select(selectIsLightMode);
   user!: UserData;
-  isLoading = true;
+  isLoading$: Observable<boolean> = this.store.pipe(select(authLoadingSelector));
 
   constructor(
     private authService: AuthService,
@@ -53,10 +55,6 @@ export class PortalLandingComponent extends UnsubscribeOnDestroy implements OnIn
         this.user = user;
         this.store.dispatch(setAuthLoading({isLoading: false}));
       }
-    })
-    this.store.select(authLoadingSelector).pipe(
-      takeUntil(this.destroy$)).subscribe((isLoading: boolean): void => {
-      this.isLoading = isLoading;
     })
     this.subscribeToLogoutSuccess();
   }

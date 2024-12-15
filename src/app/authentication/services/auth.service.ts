@@ -93,7 +93,7 @@ export class AuthService {
     if(!expDate || new Date() > expDate) {
       return null
     }
-    return localStorage.getItem('token');
+    return tokenExp;
   }
 
   setToken(expiresIn: number, idToken: string): void {
