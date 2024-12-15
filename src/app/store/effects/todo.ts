@@ -18,7 +18,6 @@ export class TodoEffects {
     private todoService: TodoService
   ) {}
 
-  // Observable<Action>
   getTodos$ = createEffect((): Observable<any> =>
     this.actions$.pipe(
       ofType(TodoActions.getTodos),

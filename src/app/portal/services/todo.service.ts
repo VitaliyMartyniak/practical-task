@@ -61,7 +61,7 @@ export class TodoService {
   bulkDeleteTodo(idsArray: string[]): Observable<void[]> {
     const deletePromises = idsArray.map(id => {
       const docRef = doc(this.db, 'todos', id);
-      return deleteDoc(docRef); // deleteDoc already returns Promise<void>
+      return deleteDoc(docRef);
     });
 
     return from(Promise.all(deletePromises));
